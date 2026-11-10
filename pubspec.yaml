@@ -77,6 +77,12 @@ flutter:
     - family: Anton
       fonts:
         - asset: fonts/Anton-Regular.ttf
+    - family: Inter
+      fonts: 
+        - asset: fonts/Inter-VariableFont_opsz,wght.ttf
+    - family: IBM Plex Mono
+      fonts:
+        - asset: fonts/IBMPlexMono-Medium.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
