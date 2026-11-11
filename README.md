@@ -1,6 +1,6 @@
 # match_that
 
-A new Flutter project.
+This is a fingerboarding challenge game where fingerboarders take turns passing a device around to match randomly generated tricks on the screen. Landing each trick awards a corresponding number of points, and the player who has claimed the most points at the end of a round wins.
 
 ## Getting Started
 
