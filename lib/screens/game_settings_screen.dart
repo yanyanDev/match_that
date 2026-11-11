@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 class GameSettingsScreen extends StatelessWidget {
   const GameSettingsScreen({super.key});
-
+// TODO: Figure out why header row is not following Scaffold color
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF3F1E9),
       appBar: AppBar(
         title: const Text('MATCH THAT!'),
         // Flutter automatically adds a back button here!
