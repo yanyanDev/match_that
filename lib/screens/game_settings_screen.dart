@@ -7,7 +7,7 @@ class GameSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Game Settings'),
+        title: const Text('MATCH THAT!'),
         // Flutter automatically adds a back button here!
       ),
       body: Center(
@@ -15,17 +15,25 @@ class GameSettingsScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Configure Your Game',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'SET IT OFF.',
+              style: TextStyle(fontSize: 50, fontFamily: "Anton"),
             ),
             const SizedBox(height: 20),
             
-            // A button inside this screen to take you back manually if needed
+            // Once fields are entered, pres to start game
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                //starts game
               },
-              child: const Text('Save & Go Back'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFD9FF43),
+                shadowColor: Colors.black,
+                elevation: 5,
+              ),
+              child: const Text(
+                'PLAY!',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           ],
         ),
