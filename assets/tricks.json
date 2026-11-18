@@ -1,1 +1,2425 @@
-[]
+{
+  "version": 1,
+  "thresholds": {
+    "intermediate": 5,
+    "advanced": 8
+  },
+  "tricks": [
+    {
+      "id": "regular_ollie",
+      "name": "Ollie",
+      "trick": "ollie",
+      "stance": "regular",
+      "points": 1
+    },
+    {
+      "id": "regular_ollie_fs180",
+      "name": "Frontside 180",
+      "trick": "ollie",
+      "stance": "regular",
+      "modifier": "fs180",
+      "points": 2
+    },
+    {
+      "id": "regular_ollie_bs180",
+      "name": "Backside 180",
+      "trick": "ollie",
+      "stance": "regular",
+      "modifier": "bs180",
+      "points": 2
+    },
+    {
+      "id": "regular_ollie_bs360",
+      "name": "Backside 360",
+      "trick": "ollie",
+      "stance": "regular",
+      "modifier": "bs360",
+      "points": 4
+    },
+    {
+      "id": "fakie_ollie",
+      "name": "Fakie Ollie",
+      "trick": "ollie",
+      "stance": "fakie",
+      "points": 2
+    },
+    {
+      "id": "fakie_ollie_fs180",
+      "name": "Fakie Frontside 180",
+      "trick": "ollie",
+      "stance": "fakie",
+      "modifier": "fs180",
+      "points": 3
+    },
+    {
+      "id": "fakie_ollie_bs180",
+      "name": "Halfcab Ollie",
+      "trick": "ollie",
+      "stance": "fakie",
+      "modifier": "bs180",
+      "points": 3
+    },
+    {
+      "id": "fakie_ollie_bs360",
+      "name": "Full Cab Ollie",
+      "trick": "ollie",
+      "stance": "fakie",
+      "modifier": "bs360",
+      "points": 5
+    },
+    {
+      "id": "nollie_ollie",
+      "name": "Nollie",
+      "trick": "ollie",
+      "stance": "nollie",
+      "points": 2
+    },
+    {
+      "id": "nollie_ollie_fs180",
+      "name": "Nollie Frontside 180",
+      "trick": "ollie",
+      "stance": "nollie",
+      "modifier": "fs180",
+      "points": 3
+    },
+    {
+      "id": "nollie_ollie_bs180",
+      "name": "Nollie Backside 180",
+      "trick": "ollie",
+      "stance": "nollie",
+      "modifier": "bs180",
+      "points": 3
+    },
+    {
+      "id": "nollie_ollie_bs360",
+      "name": "Nollie Backside 360",
+      "trick": "ollie",
+      "stance": "nollie",
+      "modifier": "bs360",
+      "points": 5
+    },
+    {
+      "id": "switch_ollie",
+      "name": "Switch Ollie",
+      "trick": "ollie",
+      "stance": "switch",
+      "points": 3
+    },
+    {
+      "id": "switch_ollie_fs180",
+      "name": "Switch Frontside 180",
+      "trick": "ollie",
+      "stance": "switch",
+      "modifier": "fs180",
+      "points": 4
+    },
+    {
+      "id": "switch_ollie_bs180",
+      "name": "Switch Backside 180",
+      "trick": "ollie",
+      "stance": "switch",
+      "modifier": "bs180",
+      "points": 4
+    },
+    {
+      "id": "switch_ollie_fs360",
+      "name": "Switch Frontside 360",
+      "trick": "ollie",
+      "stance": "switch",
+      "modifier": "fs360",
+      "points": 6
+    },
+    {
+      "id": "regular_pop_shuv",
+      "name": "Pop Shuv",
+      "trick": "pop_shuv",
+      "stance": "regular",
+      "points": 1
+    },
+    {
+      "id": "regular_pop_shuv_revert",
+      "name": "Pop Shuv Revert",
+      "trick": "pop_shuv",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 2
+    },
+    {
+      "id": "fakie_pop_shuv",
+      "name": "Fakie Pop Shuv",
+      "trick": "pop_shuv",
+      "stance": "fakie",
+      "points": 2
+    },
+    {
+      "id": "fakie_pop_shuv_revert",
+      "name": "Fakie Pop Shuv Revert",
+      "trick": "pop_shuv",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 3
+    },
+    {
+      "id": "nollie_pop_shuv",
+      "name": "Nollie Pop Shuv",
+      "trick": "pop_shuv",
+      "stance": "nollie",
+      "points": 2
+    },
+    {
+      "id": "nollie_pop_shuv_revert",
+      "name": "Nollie Pop Shuv Revert",
+      "trick": "pop_shuv",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 3
+    },
+    {
+      "id": "switch_pop_shuv",
+      "name": "Switch Pop Shuv",
+      "trick": "pop_shuv",
+      "stance": "switch",
+      "points": 3
+    },
+    {
+      "id": "switch_pop_shuv_revert",
+      "name": "Switch Pop Shuv Revert",
+      "trick": "pop_shuv",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 4
+    },
+    {
+      "id": "regular_front_shuv",
+      "name": "Front Shuv",
+      "trick": "front_shuv",
+      "stance": "regular",
+      "points": 2
+    },
+    {
+      "id": "regular_front_shuv_revert",
+      "name": "Front Shuv Revert",
+      "trick": "front_shuv",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 3
+    },
+    {
+      "id": "fakie_front_shuv",
+      "name": "Fakie Front Shuv",
+      "trick": "front_shuv",
+      "stance": "fakie",
+      "points": 3
+    },
+    {
+      "id": "fakie_front_shuv_revert",
+      "name": "Fakie Front Shuv Revert",
+      "trick": "front_shuv",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 4
+    },
+    {
+      "id": "nollie_front_shuv",
+      "name": "Nollie Front Shuv",
+      "trick": "front_shuv",
+      "stance": "nollie",
+      "points": 3
+    },
+    {
+      "id": "nollie_front_shuv_revert",
+      "name": "Nollie Front Shuv Revert",
+      "trick": "front_shuv",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 4
+    },
+    {
+      "id": "switch_front_shuv",
+      "name": "Switch Front Shuv",
+      "trick": "front_shuv",
+      "stance": "switch",
+      "points": 4
+    },
+    {
+      "id": "switch_front_shuv_revert",
+      "name": "Switch Front Shuv Revert",
+      "trick": "front_shuv",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "regular_360_shuv",
+      "name": "360 Shuv",
+      "trick": "360_shuv",
+      "stance": "regular",
+      "points": 3
+    },
+    {
+      "id": "regular_360_shuv_revert",
+      "name": "360 Shuv Revert",
+      "trick": "360_shuv",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 4
+    },
+    {
+      "id": "fakie_360_shuv",
+      "name": "Fakie 360 Shuv",
+      "trick": "360_shuv",
+      "stance": "fakie",
+      "points": 4
+    },
+    {
+      "id": "fakie_360_shuv_revert",
+      "name": "Fakie 360 Shuv Revert",
+      "trick": "360_shuv",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "nollie_360_shuv",
+      "name": "Nollie 360 Shuv",
+      "trick": "360_shuv",
+      "stance": "nollie",
+      "points": 4
+    },
+    {
+      "id": "nollie_360_shuv_revert",
+      "name": "Nollie 360 Shuv Revert",
+      "trick": "360_shuv",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "switch_360_shuv",
+      "name": "Switch 360 Shuv",
+      "trick": "360_shuv",
+      "stance": "switch",
+      "points": 5
+    },
+    {
+      "id": "switch_360_shuv_revert",
+      "name": "Switch 360 Shuv Revert",
+      "trick": "360_shuv",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "regular_fs_360_shuv",
+      "name": "FS 360 Shuv",
+      "trick": "fs_360_shuv",
+      "stance": "regular",
+      "points": 4
+    },
+    {
+      "id": "regular_fs_360_shuv_revert",
+      "name": "FS 360 Shuv Revert",
+      "trick": "fs_360_shuv",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "fakie_fs_360_shuv",
+      "name": "Fakie FS 360 Shuv",
+      "trick": "fs_360_shuv",
+      "stance": "fakie",
+      "points": 5
+    },
+    {
+      "id": "fakie_fs_360_shuv_revert",
+      "name": "Fakie FS 360 Shuv Revert",
+      "trick": "fs_360_shuv",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "nollie_fs_360_shuv",
+      "name": "Nollie FS 360 Shuv",
+      "trick": "fs_360_shuv",
+      "stance": "nollie",
+      "points": 5
+    },
+    {
+      "id": "nollie_fs_360_shuv_revert",
+      "name": "Nollie FS 360 Shuv Revert",
+      "trick": "fs_360_shuv",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "switch_fs_360_shuv",
+      "name": "Switch FS 360 Shuv",
+      "trick": "fs_360_shuv",
+      "stance": "switch",
+      "points": 6
+    },
+    {
+      "id": "switch_fs_360_shuv_revert",
+      "name": "Switch FS 360 Shuv Revert",
+      "trick": "fs_360_shuv",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "regular_bs_bigspin",
+      "name": "BS Bigspin",
+      "trick": "bs_bigspin",
+      "stance": "regular",
+      "points": 4
+    },
+    {
+      "id": "fakie_bs_bigspin",
+      "name": "Fakie BS Bigspin",
+      "trick": "bs_bigspin",
+      "stance": "fakie",
+      "points": 5
+    },
+    {
+      "id": "nollie_bs_bigspin",
+      "name": "Nollie BS Bigspin",
+      "trick": "bs_bigspin",
+      "stance": "nollie",
+      "points": 5
+    },
+    {
+      "id": "switch_bs_bigspin",
+      "name": "Switch BS Bigspin",
+      "trick": "bs_bigspin",
+      "stance": "switch",
+      "points": 6
+    },
+    {
+      "id": "regular_fs_bigspin",
+      "name": "FS Bigspin",
+      "trick": "fs_bigspin",
+      "stance": "regular",
+      "points": 5
+    },
+    {
+      "id": "fakie_fs_bigspin",
+      "name": "Fakie FS Bigspin",
+      "trick": "fs_bigspin",
+      "stance": "fakie",
+      "points": 6
+    },
+    {
+      "id": "nollie_fs_bigspin",
+      "name": "Nollie FS Bigspin",
+      "trick": "fs_bigspin",
+      "stance": "nollie",
+      "points": 6
+    },
+    {
+      "id": "switch_fs_bigspin",
+      "name": "Switch FS Bigspin",
+      "trick": "fs_bigspin",
+      "stance": "switch",
+      "points": 7
+    },
+    {
+      "id": "regular_bs_biggerspin",
+      "name": "BS Biggerspin",
+      "trick": "bs_biggerspin",
+      "stance": "regular",
+      "points": 6
+    },
+    {
+      "id": "fakie_bs_biggerspin",
+      "name": "Fakie BS Biggerspin",
+      "trick": "bs_biggerspin",
+      "stance": "fakie",
+      "points": 7
+    },
+    {
+      "id": "nollie_bs_biggerspin",
+      "name": "Nollie BS Biggerspin",
+      "trick": "bs_biggerspin",
+      "stance": "nollie",
+      "points": 7
+    },
+    {
+      "id": "switch_bs_biggerspin",
+      "name": "Switch BS Biggerspin",
+      "trick": "bs_biggerspin",
+      "stance": "switch",
+      "points": 8
+    },
+    {
+      "id": "regular_fs_biggerspin",
+      "name": "FS Biggerspin",
+      "trick": "fs_biggerspin",
+      "stance": "regular",
+      "points": 7
+    },
+    {
+      "id": "fakie_fs_biggerspin",
+      "name": "Fakie FS Biggerspin",
+      "trick": "fs_biggerspin",
+      "stance": "fakie",
+      "points": 8
+    },
+    {
+      "id": "nollie_fs_biggerspin",
+      "name": "Nollie FS Biggerspin",
+      "trick": "fs_biggerspin",
+      "stance": "nollie",
+      "points": 8
+    },
+    {
+      "id": "switch_fs_biggerspin",
+      "name": "Switch FS Biggerspin",
+      "trick": "fs_biggerspin",
+      "stance": "switch",
+      "points": 9
+    },
+    {
+      "id": "regular_kickflip",
+      "name": "Kickflip",
+      "trick": "kickflip",
+      "stance": "regular",
+      "points": 2
+    },
+    {
+      "id": "regular_kickflip_fs180",
+      "name": "Frontside 180 Kickflip",
+      "trick": "kickflip",
+      "stance": "regular",
+      "modifier": "fs180",
+      "points": 3
+    },
+    {
+      "id": "regular_kickflip_bs180",
+      "name": "Backside 180 Kickflip",
+      "trick": "kickflip",
+      "stance": "regular",
+      "modifier": "bs180",
+      "points": 3
+    },
+    {
+      "id": "regular_kickflip_bs360",
+      "name": "Backside 360 Kickflip",
+      "trick": "kickflip",
+      "stance": "regular",
+      "modifier": "bs360",
+      "points": 5
+    },
+    {
+      "id": "fakie_kickflip",
+      "name": "Fakie Kickflip",
+      "trick": "kickflip",
+      "stance": "fakie",
+      "points": 3
+    },
+    {
+      "id": "fakie_kickflip_fs180",
+      "name": "Fakie Frontside 180 Kickflip",
+      "trick": "kickflip",
+      "stance": "fakie",
+      "modifier": "fs180",
+      "points": 4
+    },
+    {
+      "id": "fakie_kickflip_bs180",
+      "name": "Halfcab Flip",
+      "trick": "kickflip",
+      "stance": "fakie",
+      "modifier": "bs180",
+      "points": 4
+    },
+    {
+      "id": "fakie_kickflip_bs360",
+      "name": "Full Cab Flip",
+      "trick": "kickflip",
+      "stance": "fakie",
+      "modifier": "bs360",
+      "points": 6
+    },
+    {
+      "id": "nollie_kickflip",
+      "name": "Nollie Kickflip",
+      "trick": "kickflip",
+      "stance": "nollie",
+      "points": 3
+    },
+    {
+      "id": "nollie_kickflip_fs180",
+      "name": "Nollie Frontside 180 Kickflip",
+      "trick": "kickflip",
+      "stance": "nollie",
+      "modifier": "fs180",
+      "points": 4
+    },
+    {
+      "id": "nollie_kickflip_bs180",
+      "name": "Nollie Backside 180 Kickflip",
+      "trick": "kickflip",
+      "stance": "nollie",
+      "modifier": "bs180",
+      "points": 4
+    },
+    {
+      "id": "nollie_kickflip_bs360",
+      "name": "Nollie Backside 360 Kickflip",
+      "trick": "kickflip",
+      "stance": "nollie",
+      "modifier": "bs360",
+      "points": 6
+    },
+    {
+      "id": "switch_kickflip",
+      "name": "Switch Kickflip",
+      "trick": "kickflip",
+      "stance": "switch",
+      "points": 4
+    },
+    {
+      "id": "switch_kickflip_fs180",
+      "name": "Switch Frontside 180 Kickflip",
+      "trick": "kickflip",
+      "stance": "switch",
+      "modifier": "fs180",
+      "points": 5
+    },
+    {
+      "id": "switch_kickflip_bs180",
+      "name": "Switch Backside 180 Kickflip",
+      "trick": "kickflip",
+      "stance": "switch",
+      "modifier": "bs180",
+      "points": 5
+    },
+    {
+      "id": "switch_kickflip_fs360",
+      "name": "Switch Frontside 360 Kickflip",
+      "trick": "kickflip",
+      "stance": "switch",
+      "modifier": "fs360",
+      "points": 7
+    },
+    {
+      "id": "regular_double_flip",
+      "name": "Double Flip",
+      "trick": "double_flip",
+      "stance": "regular",
+      "points": 4
+    },
+    {
+      "id": "regular_double_flip_fs180",
+      "name": "Frontside 180 Double Flip",
+      "trick": "double_flip",
+      "stance": "regular",
+      "modifier": "fs180",
+      "points": 5
+    },
+    {
+      "id": "regular_double_flip_bs180",
+      "name": "Backside 180 Double Flip",
+      "trick": "double_flip",
+      "stance": "regular",
+      "modifier": "bs180",
+      "points": 5
+    },
+    {
+      "id": "regular_double_flip_bs360",
+      "name": "Backside 360 Double Flip",
+      "trick": "double_flip",
+      "stance": "regular",
+      "modifier": "bs360",
+      "points": 7
+    },
+    {
+      "id": "fakie_double_flip",
+      "name": "Fakie Double Flip",
+      "trick": "double_flip",
+      "stance": "fakie",
+      "points": 5
+    },
+    {
+      "id": "fakie_double_flip_fs180",
+      "name": "Fakie Frontside 180 Double Flip",
+      "trick": "double_flip",
+      "stance": "fakie",
+      "modifier": "fs180",
+      "points": 6
+    },
+    {
+      "id": "fakie_double_flip_bs180",
+      "name": "Halfcab Double Flip",
+      "trick": "double_flip",
+      "stance": "fakie",
+      "modifier": "bs180",
+      "points": 6
+    },
+    {
+      "id": "fakie_double_flip_bs360",
+      "name": "Full Cab Double Flip",
+      "trick": "double_flip",
+      "stance": "fakie",
+      "modifier": "bs360",
+      "points": 8
+    },
+    {
+      "id": "nollie_double_flip",
+      "name": "Nollie Double Flip",
+      "trick": "double_flip",
+      "stance": "nollie",
+      "points": 5
+    },
+    {
+      "id": "nollie_double_flip_fs180",
+      "name": "Nollie Frontside 180 Double Flip",
+      "trick": "double_flip",
+      "stance": "nollie",
+      "modifier": "fs180",
+      "points": 6
+    },
+    {
+      "id": "nollie_double_flip_bs180",
+      "name": "Nollie Backside 180 Double Flip",
+      "trick": "double_flip",
+      "stance": "nollie",
+      "modifier": "bs180",
+      "points": 6
+    },
+    {
+      "id": "nollie_double_flip_bs360",
+      "name": "Nollie Backside 360 Double Flip",
+      "trick": "double_flip",
+      "stance": "nollie",
+      "modifier": "bs360",
+      "points": 8
+    },
+    {
+      "id": "switch_double_flip",
+      "name": "Switch Double Flip",
+      "trick": "double_flip",
+      "stance": "switch",
+      "points": 6
+    },
+    {
+      "id": "switch_double_flip_fs180",
+      "name": "Switch Frontside 180 Double Flip",
+      "trick": "double_flip",
+      "stance": "switch",
+      "modifier": "fs180",
+      "points": 7
+    },
+    {
+      "id": "switch_double_flip_bs180",
+      "name": "Switch Backside 180 Double Flip",
+      "trick": "double_flip",
+      "stance": "switch",
+      "modifier": "bs180",
+      "points": 7
+    },
+    {
+      "id": "switch_double_flip_fs360",
+      "name": "Switch Frontside 360 Double Flip",
+      "trick": "double_flip",
+      "stance": "switch",
+      "modifier": "fs360",
+      "points": 9
+    },
+    {
+      "id": "regular_heelflip",
+      "name": "Heelflip",
+      "trick": "heelflip",
+      "stance": "regular",
+      "points": 2
+    },
+    {
+      "id": "regular_heelflip_fs180",
+      "name": "Frontside 180 Heelflip",
+      "trick": "heelflip",
+      "stance": "regular",
+      "modifier": "fs180",
+      "points": 3
+    },
+    {
+      "id": "regular_heelflip_bs180",
+      "name": "Backside 180 Heelflip",
+      "trick": "heelflip",
+      "stance": "regular",
+      "modifier": "bs180",
+      "points": 3
+    },
+    {
+      "id": "regular_heelflip_bs360",
+      "name": "Backside 360 Heelflip",
+      "trick": "heelflip",
+      "stance": "regular",
+      "modifier": "bs360",
+      "points": 5
+    },
+    {
+      "id": "fakie_heelflip",
+      "name": "Fakie Heelflip",
+      "trick": "heelflip",
+      "stance": "fakie",
+      "points": 3
+    },
+    {
+      "id": "fakie_heelflip_fs180",
+      "name": "Fakie Frontside 180 Heelflip",
+      "trick": "heelflip",
+      "stance": "fakie",
+      "modifier": "fs180",
+      "points": 4
+    },
+    {
+      "id": "fakie_heelflip_bs180",
+      "name": "Halfcab Heel",
+      "trick": "heelflip",
+      "stance": "fakie",
+      "modifier": "bs180",
+      "points": 4
+    },
+    {
+      "id": "fakie_heelflip_bs360",
+      "name": "Full Cab Heel",
+      "trick": "heelflip",
+      "stance": "fakie",
+      "modifier": "bs360",
+      "points": 6
+    },
+    {
+      "id": "nollie_heelflip",
+      "name": "Nollie Heelflip",
+      "trick": "heelflip",
+      "stance": "nollie",
+      "points": 3
+    },
+    {
+      "id": "nollie_heelflip_fs180",
+      "name": "Nollie Frontside 180 Heelflip",
+      "trick": "heelflip",
+      "stance": "nollie",
+      "modifier": "fs180",
+      "points": 4
+    },
+    {
+      "id": "nollie_heelflip_bs180",
+      "name": "Nollie Backside 180 Heelflip",
+      "trick": "heelflip",
+      "stance": "nollie",
+      "modifier": "bs180",
+      "points": 4
+    },
+    {
+      "id": "nollie_heelflip_bs360",
+      "name": "Nollie Backside 360 Heelflip",
+      "trick": "heelflip",
+      "stance": "nollie",
+      "modifier": "bs360",
+      "points": 6
+    },
+    {
+      "id": "switch_heelflip",
+      "name": "Switch Heelflip",
+      "trick": "heelflip",
+      "stance": "switch",
+      "points": 4
+    },
+    {
+      "id": "switch_heelflip_fs180",
+      "name": "Switch Frontside 180 Heelflip",
+      "trick": "heelflip",
+      "stance": "switch",
+      "modifier": "fs180",
+      "points": 5
+    },
+    {
+      "id": "switch_heelflip_bs180",
+      "name": "Switch Backside 180 Heelflip",
+      "trick": "heelflip",
+      "stance": "switch",
+      "modifier": "bs180",
+      "points": 5
+    },
+    {
+      "id": "switch_heelflip_fs360",
+      "name": "Switch Frontside 360 Heelflip",
+      "trick": "heelflip",
+      "stance": "switch",
+      "modifier": "fs360",
+      "points": 7
+    },
+    {
+      "id": "regular_double_heel",
+      "name": "Double Heel",
+      "trick": "double_heel",
+      "stance": "regular",
+      "points": 4
+    },
+    {
+      "id": "regular_double_heel_fs180",
+      "name": "Frontside 180 Double Heel",
+      "trick": "double_heel",
+      "stance": "regular",
+      "modifier": "fs180",
+      "points": 5
+    },
+    {
+      "id": "regular_double_heel_bs180",
+      "name": "Backside 180 Double Heel",
+      "trick": "double_heel",
+      "stance": "regular",
+      "modifier": "bs180",
+      "points": 5
+    },
+    {
+      "id": "regular_double_heel_bs360",
+      "name": "Backside 360 Double Heel",
+      "trick": "double_heel",
+      "stance": "regular",
+      "modifier": "bs360",
+      "points": 7
+    },
+    {
+      "id": "fakie_double_heel",
+      "name": "Fakie Double Heel",
+      "trick": "double_heel",
+      "stance": "fakie",
+      "points": 5
+    },
+    {
+      "id": "fakie_double_heel_fs180",
+      "name": "Fakie Frontside 180 Double Heel",
+      "trick": "double_heel",
+      "stance": "fakie",
+      "modifier": "fs180",
+      "points": 6
+    },
+    {
+      "id": "fakie_double_heel_bs180",
+      "name": "Halfcab Double Heel",
+      "trick": "double_heel",
+      "stance": "fakie",
+      "modifier": "bs180",
+      "points": 6
+    },
+    {
+      "id": "fakie_double_heel_bs360",
+      "name": "Full Cab Double Heel",
+      "trick": "double_heel",
+      "stance": "fakie",
+      "modifier": "bs360",
+      "points": 8
+    },
+    {
+      "id": "nollie_double_heel",
+      "name": "Nollie Double Heel",
+      "trick": "double_heel",
+      "stance": "nollie",
+      "points": 5
+    },
+    {
+      "id": "nollie_double_heel_fs180",
+      "name": "Nollie Frontside 180 Double Heel",
+      "trick": "double_heel",
+      "stance": "nollie",
+      "modifier": "fs180",
+      "points": 6
+    },
+    {
+      "id": "nollie_double_heel_bs180",
+      "name": "Nollie Backside 180 Double Heel",
+      "trick": "double_heel",
+      "stance": "nollie",
+      "modifier": "bs180",
+      "points": 6
+    },
+    {
+      "id": "nollie_double_heel_bs360",
+      "name": "Nollie Backside 360 Double Heel",
+      "trick": "double_heel",
+      "stance": "nollie",
+      "modifier": "bs360",
+      "points": 8
+    },
+    {
+      "id": "switch_double_heel",
+      "name": "Switch Double Heel",
+      "trick": "double_heel",
+      "stance": "switch",
+      "points": 6
+    },
+    {
+      "id": "switch_double_heel_fs180",
+      "name": "Switch Frontside 180 Double Heel",
+      "trick": "double_heel",
+      "stance": "switch",
+      "modifier": "fs180",
+      "points": 7
+    },
+    {
+      "id": "switch_double_heel_bs180",
+      "name": "Switch Backside 180 Double Heel",
+      "trick": "double_heel",
+      "stance": "switch",
+      "modifier": "bs180",
+      "points": 7
+    },
+    {
+      "id": "switch_double_heel_fs360",
+      "name": "Switch Frontside 360 Double Heel",
+      "trick": "double_heel",
+      "stance": "switch",
+      "modifier": "fs360",
+      "points": 9
+    },
+    {
+      "id": "regular_varial_flip",
+      "name": "Varial Flip",
+      "trick": "varial_flip",
+      "stance": "regular",
+      "points": 3
+    },
+    {
+      "id": "regular_varial_flip_revert",
+      "name": "Varial Flip Revert",
+      "trick": "varial_flip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 4
+    },
+    {
+      "id": "fakie_varial_flip",
+      "name": "Fakie Varial Flip",
+      "trick": "varial_flip",
+      "stance": "fakie",
+      "points": 4
+    },
+    {
+      "id": "fakie_varial_flip_revert",
+      "name": "Fakie Varial Flip Revert",
+      "trick": "varial_flip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "nollie_varial_flip",
+      "name": "Nollie Varial Flip",
+      "trick": "varial_flip",
+      "stance": "nollie",
+      "points": 4
+    },
+    {
+      "id": "nollie_varial_flip_revert",
+      "name": "Nollie Varial Flip Revert",
+      "trick": "varial_flip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "switch_varial_flip",
+      "name": "Switch Varial Flip",
+      "trick": "varial_flip",
+      "stance": "switch",
+      "points": 5
+    },
+    {
+      "id": "switch_varial_flip_revert",
+      "name": "Switch Varial Flip Revert",
+      "trick": "varial_flip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "regular_nightmare_flip",
+      "name": "Nightmare Flip",
+      "trick": "nightmare_flip",
+      "stance": "regular",
+      "points": 6
+    },
+    {
+      "id": "regular_nightmare_flip_revert",
+      "name": "Nightmare Flip Revert",
+      "trick": "nightmare_flip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "fakie_nightmare_flip",
+      "name": "Fakie Nightmare Flip",
+      "trick": "nightmare_flip",
+      "stance": "fakie",
+      "points": 7
+    },
+    {
+      "id": "fakie_nightmare_flip_revert",
+      "name": "Fakie Nightmare Flip Revert",
+      "trick": "nightmare_flip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "nollie_nightmare_flip",
+      "name": "Nollie Nightmare Flip",
+      "trick": "nightmare_flip",
+      "stance": "nollie",
+      "points": 7
+    },
+    {
+      "id": "nollie_nightmare_flip_revert",
+      "name": "Nollie Nightmare Flip Revert",
+      "trick": "nightmare_flip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "switch_nightmare_flip",
+      "name": "Switch Nightmare Flip",
+      "trick": "nightmare_flip",
+      "stance": "switch",
+      "points": 8
+    },
+    {
+      "id": "switch_nightmare_flip_revert",
+      "name": "Switch Nightmare Flip Revert",
+      "trick": "nightmare_flip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "regular_varial_heel",
+      "name": "Varial Heel",
+      "trick": "varial_heel",
+      "stance": "regular",
+      "points": 3
+    },
+    {
+      "id": "regular_varial_heel_revert",
+      "name": "Varial Heel Revert",
+      "trick": "varial_heel",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 4
+    },
+    {
+      "id": "fakie_varial_heel",
+      "name": "Fakie Varial Heel",
+      "trick": "varial_heel",
+      "stance": "fakie",
+      "points": 4
+    },
+    {
+      "id": "fakie_varial_heel_revert",
+      "name": "Fakie Varial Heel Revert",
+      "trick": "varial_heel",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "nollie_varial_heel",
+      "name": "Nollie Varial Heel",
+      "trick": "varial_heel",
+      "stance": "nollie",
+      "points": 4
+    },
+    {
+      "id": "nollie_varial_heel_revert",
+      "name": "Nollie Varial Heel Revert",
+      "trick": "varial_heel",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "switch_varial_heel",
+      "name": "Switch Varial Heel",
+      "trick": "varial_heel",
+      "stance": "switch",
+      "points": 5
+    },
+    {
+      "id": "switch_varial_heel_revert",
+      "name": "Switch Varial Heel Revert",
+      "trick": "varial_heel",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "regular_varial_double_heel",
+      "name": "Varial Double Heel",
+      "trick": "varial_double_heel",
+      "stance": "regular",
+      "points": 6
+    },
+    {
+      "id": "regular_varial_double_heel_revert",
+      "name": "Varial Double Heel Revert",
+      "trick": "varial_double_heel",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "fakie_varial_double_heel",
+      "name": "Fakie Varial Double Heel",
+      "trick": "varial_double_heel",
+      "stance": "fakie",
+      "points": 7
+    },
+    {
+      "id": "fakie_varial_double_heel_revert",
+      "name": "Fakie Varial Double Heel Revert",
+      "trick": "varial_double_heel",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "nollie_varial_double_heel",
+      "name": "Nollie Varial Double Heel",
+      "trick": "varial_double_heel",
+      "stance": "nollie",
+      "points": 7
+    },
+    {
+      "id": "nollie_varial_double_heel_revert",
+      "name": "Nollie Varial Double Heel Revert",
+      "trick": "varial_double_heel",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "switch_varial_double_heel",
+      "name": "Switch Varial Double Heel",
+      "trick": "varial_double_heel",
+      "stance": "switch",
+      "points": 8
+    },
+    {
+      "id": "switch_varial_double_heel_revert",
+      "name": "Switch Varial Double Heel Revert",
+      "trick": "varial_double_heel",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "regular_hardflip",
+      "name": "Hardflip",
+      "trick": "hardflip",
+      "stance": "regular",
+      "points": 4
+    },
+    {
+      "id": "regular_hardflip_revert",
+      "name": "Ghetto Bird",
+      "trick": "hardflip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "fakie_hardflip",
+      "name": "Fakie Hardflip",
+      "trick": "hardflip",
+      "stance": "fakie",
+      "points": 5
+    },
+    {
+      "id": "fakie_hardflip_revert",
+      "name": "Fakie Ghetto Bird",
+      "trick": "hardflip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "nollie_hardflip",
+      "name": "Nollie Hardflip",
+      "trick": "hardflip",
+      "stance": "nollie",
+      "points": 5
+    },
+    {
+      "id": "nollie_hardflip_revert",
+      "name": "Nollie Ghetto Bird",
+      "trick": "hardflip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "switch_hardflip",
+      "name": "Switch Hardflip",
+      "trick": "hardflip",
+      "stance": "switch",
+      "points": 6
+    },
+    {
+      "id": "switch_hardflip_revert",
+      "name": "Switch Ghetto Bird",
+      "trick": "hardflip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "regular_hard_double_flip",
+      "name": "Hard Double Flip",
+      "trick": "hard_double_flip",
+      "stance": "regular",
+      "points": 7
+    },
+    {
+      "id": "regular_hard_double_flip_revert",
+      "name": "Hard Double Flip Revert",
+      "trick": "hard_double_flip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "fakie_hard_double_flip",
+      "name": "Fakie Hard Double Flip",
+      "trick": "hard_double_flip",
+      "stance": "fakie",
+      "points": 8
+    },
+    {
+      "id": "fakie_hard_double_flip_revert",
+      "name": "Fakie Hard Double Flip Revert",
+      "trick": "hard_double_flip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "nollie_hard_double_flip",
+      "name": "Nollie Hard Double Flip",
+      "trick": "hard_double_flip",
+      "stance": "nollie",
+      "points": 8
+    },
+    {
+      "id": "nollie_hard_double_flip_revert",
+      "name": "Nollie Hard Double Flip Revert",
+      "trick": "hard_double_flip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "switch_hard_double_flip",
+      "name": "Switch Hard Double Flip",
+      "trick": "hard_double_flip",
+      "stance": "switch",
+      "points": 9
+    },
+    {
+      "id": "switch_hard_double_flip_revert",
+      "name": "Switch Hard Double Flip Revert",
+      "trick": "hard_double_flip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 10
+    },
+    {
+      "id": "regular_360_hardflip",
+      "name": "360 Hardflip",
+      "trick": "360_hardflip",
+      "stance": "regular",
+      "points": 7
+    },
+    {
+      "id": "regular_360_hardflip_revert",
+      "name": "360 Ghetto Bird",
+      "trick": "360_hardflip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "fakie_360_hardflip",
+      "name": "Fakie 360 Hardflip",
+      "trick": "360_hardflip",
+      "stance": "fakie",
+      "points": 8
+    },
+    {
+      "id": "fakie_360_hardflip_revert",
+      "name": "Fakie 360 Ghetto Bird",
+      "trick": "360_hardflip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "nollie_360_hardflip",
+      "name": "Nollie 360 Hardflip",
+      "trick": "360_hardflip",
+      "stance": "nollie",
+      "points": 8
+    },
+    {
+      "id": "nollie_360_hardflip_revert",
+      "name": "Nollie 360 Ghetto Bird",
+      "trick": "360_hardflip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "switch_360_hardflip",
+      "name": "Switch 360 Hardflip",
+      "trick": "360_hardflip",
+      "stance": "switch",
+      "points": 9
+    },
+    {
+      "id": "switch_360_hardflip_revert",
+      "name": "Switch 360 Ghetto Bird",
+      "trick": "360_hardflip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 10
+    },
+    {
+      "id": "regular_inward_heel",
+      "name": "Inward Heel",
+      "trick": "inward_heel",
+      "stance": "regular",
+      "points": 4
+    },
+    {
+      "id": "regular_inward_heel_revert",
+      "name": "Inward Heel Revert",
+      "trick": "inward_heel",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 5
+    },
+    {
+      "id": "fakie_inward_heel",
+      "name": "Fakie Inward Heel",
+      "trick": "inward_heel",
+      "stance": "fakie",
+      "points": 5
+    },
+    {
+      "id": "fakie_inward_heel_revert",
+      "name": "Fakie Inward Heel Revert",
+      "trick": "inward_heel",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "nollie_inward_heel",
+      "name": "Nollie Inward Heel",
+      "trick": "inward_heel",
+      "stance": "nollie",
+      "points": 5
+    },
+    {
+      "id": "nollie_inward_heel_revert",
+      "name": "Nollie Inward Heel Revert",
+      "trick": "inward_heel",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "switch_inward_heel",
+      "name": "Switch Inward Heel",
+      "trick": "inward_heel",
+      "stance": "switch",
+      "points": 6
+    },
+    {
+      "id": "switch_inward_heel_revert",
+      "name": "Switch Inward Heel Revert",
+      "trick": "inward_heel",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "regular_inward_double_heel",
+      "name": "Inward Double Heel",
+      "trick": "inward_double_heel",
+      "stance": "regular",
+      "points": 7
+    },
+    {
+      "id": "fakie_inward_double_heel",
+      "name": "Fakie Inward Double Heel",
+      "trick": "inward_double_heel",
+      "stance": "fakie",
+      "points": 8
+    },
+    {
+      "id": "nollie_inward_double_heel",
+      "name": "Nollie Inward Double Heel",
+      "trick": "inward_double_heel",
+      "stance": "nollie",
+      "points": 8
+    },
+    {
+      "id": "switch_inward_double_heel",
+      "name": "Switch Inward Double Heel",
+      "trick": "inward_double_heel",
+      "stance": "switch",
+      "points": 9
+    },
+    {
+      "id": "regular_360_inward_heel",
+      "name": "360 Inward Heel",
+      "trick": "360_inward_heel",
+      "stance": "regular",
+      "points": 7
+    },
+    {
+      "id": "regular_360_inward_heel_revert",
+      "name": "360 Inward Heel Revert",
+      "trick": "360_inward_heel",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "fakie_360_inward_heel",
+      "name": "Fakie 360 Inward Heel",
+      "trick": "360_inward_heel",
+      "stance": "fakie",
+      "points": 8
+    },
+    {
+      "id": "fakie_360_inward_heel_revert",
+      "name": "Fakie 360 Inward Heel Revert",
+      "trick": "360_inward_heel",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "nollie_360_inward_heel",
+      "name": "Nollie 360 Inward Heel",
+      "trick": "360_inward_heel",
+      "stance": "nollie",
+      "points": 8
+    },
+    {
+      "id": "nollie_360_inward_heel_revert",
+      "name": "Nollie 360 Inward Heel Revert",
+      "trick": "360_inward_heel",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "switch_360_inward_heel",
+      "name": "Switch 360 Inward Heel",
+      "trick": "360_inward_heel",
+      "stance": "switch",
+      "points": 9
+    },
+    {
+      "id": "switch_360_inward_heel_revert",
+      "name": "Switch 360 Inward Heel Revert",
+      "trick": "360_inward_heel",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 10
+    },
+    {
+      "id": "regular_tre_flip",
+      "name": "Tre Flip",
+      "trick": "tre_flip",
+      "stance": "regular",
+      "points": 5
+    },
+    {
+      "id": "regular_tre_flip_revert",
+      "name": "Tre Flip Revert",
+      "trick": "tre_flip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "fakie_tre_flip",
+      "name": "Fakie Tre Flip",
+      "trick": "tre_flip",
+      "stance": "fakie",
+      "points": 6
+    },
+    {
+      "id": "fakie_tre_flip_revert",
+      "name": "Fakie Tre Flip Revert",
+      "trick": "tre_flip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "nollie_tre_flip",
+      "name": "Nollie Tre Flip",
+      "trick": "tre_flip",
+      "stance": "nollie",
+      "points": 6
+    },
+    {
+      "id": "nollie_tre_flip_revert",
+      "name": "Nollie Tre Flip Revert",
+      "trick": "tre_flip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "switch_tre_flip",
+      "name": "Switch Tre Flip",
+      "trick": "tre_flip",
+      "stance": "switch",
+      "points": 7
+    },
+    {
+      "id": "switch_tre_flip_revert",
+      "name": "Switch Tre Flip Revert",
+      "trick": "tre_flip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "regular_big_flip",
+      "name": "Big Flip",
+      "trick": "big_flip",
+      "stance": "regular",
+      "points": 6
+    },
+    {
+      "id": "fakie_big_flip",
+      "name": "Fakie Big Flip",
+      "trick": "big_flip",
+      "stance": "fakie",
+      "points": 7
+    },
+    {
+      "id": "nollie_big_flip",
+      "name": "Nollie Big Flip",
+      "trick": "big_flip",
+      "stance": "nollie",
+      "points": 7
+    },
+    {
+      "id": "switch_big_flip",
+      "name": "Switch Big Flip",
+      "trick": "big_flip",
+      "stance": "switch",
+      "points": 8
+    },
+    {
+      "id": "regular_big_double_flip",
+      "name": "Big Double Flip",
+      "trick": "big_double_flip",
+      "stance": "regular",
+      "points": 8
+    },
+    {
+      "id": "fakie_big_double_flip",
+      "name": "Fakie Big Double Flip",
+      "trick": "big_double_flip",
+      "stance": "fakie",
+      "points": 9
+    },
+    {
+      "id": "nollie_big_double_flip",
+      "name": "Nollie Big Double Flip",
+      "trick": "big_double_flip",
+      "stance": "nollie",
+      "points": 9
+    },
+    {
+      "id": "switch_big_double_flip",
+      "name": "Switch Big Double Flip",
+      "trick": "big_double_flip",
+      "stance": "switch",
+      "points": 10
+    },
+    {
+      "id": "regular_bigger_flip",
+      "name": "Bigger Flip",
+      "trick": "bigger_flip",
+      "stance": "regular",
+      "points": 8
+    },
+    {
+      "id": "fakie_bigger_flip",
+      "name": "Fakie Bigger Flip",
+      "trick": "bigger_flip",
+      "stance": "fakie",
+      "points": 9
+    },
+    {
+      "id": "nollie_bigger_flip",
+      "name": "Nollie Bigger Flip",
+      "trick": "bigger_flip",
+      "stance": "nollie",
+      "points": 9
+    },
+    {
+      "id": "switch_bigger_flip",
+      "name": "Switch Bigger Flip",
+      "trick": "bigger_flip",
+      "stance": "switch",
+      "points": 10
+    },
+    {
+      "id": "regular_tre_double_flip",
+      "name": "Tre Double Flip",
+      "trick": "tre_double_flip",
+      "stance": "regular",
+      "points": 8
+    },
+    {
+      "id": "regular_tre_double_flip_revert",
+      "name": "Tre Double Flip Revert",
+      "trick": "tre_double_flip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "fakie_tre_double_flip",
+      "name": "Fakie Tre Double Flip",
+      "trick": "tre_double_flip",
+      "stance": "fakie",
+      "points": 9
+    },
+    {
+      "id": "fakie_tre_double_flip_revert",
+      "name": "Fakie Tre Double Flip Revert",
+      "trick": "tre_double_flip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 10
+    },
+    {
+      "id": "nollie_tre_double_flip",
+      "name": "Nollie Tre Double Flip",
+      "trick": "tre_double_flip",
+      "stance": "nollie",
+      "points": 9
+    },
+    {
+      "id": "nollie_tre_double_flip_revert",
+      "name": "Nollie Tre Double Flip Revert",
+      "trick": "tre_double_flip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 10
+    },
+    {
+      "id": "switch_tre_double_flip",
+      "name": "Switch Tre Double Flip",
+      "trick": "tre_double_flip",
+      "stance": "switch",
+      "points": 10
+    },
+    {
+      "id": "switch_tre_double_flip_revert",
+      "name": "Switch Tre Double Flip Revert",
+      "trick": "tre_double_flip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 11
+    },
+    {
+      "id": "regular_540_flip",
+      "name": "540 Flip",
+      "trick": "540_flip",
+      "stance": "regular",
+      "points": 8
+    },
+    {
+      "id": "regular_540_flip_revert",
+      "name": "540 Flip Revert",
+      "trick": "540_flip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "fakie_540_flip",
+      "name": "Fakie 540 Flip",
+      "trick": "540_flip",
+      "stance": "fakie",
+      "points": 9
+    },
+    {
+      "id": "fakie_540_flip_revert",
+      "name": "Fakie 540 Flip Revert",
+      "trick": "540_flip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 10
+    },
+    {
+      "id": "nollie_540_flip",
+      "name": "Nollie 540 Flip",
+      "trick": "540_flip",
+      "stance": "nollie",
+      "points": 9
+    },
+    {
+      "id": "nollie_540_flip_revert",
+      "name": "Nollie 540 Flip Revert",
+      "trick": "540_flip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 10
+    },
+    {
+      "id": "switch_540_flip",
+      "name": "Switch 540 Flip",
+      "trick": "540_flip",
+      "stance": "switch",
+      "points": 10
+    },
+    {
+      "id": "switch_540_flip_revert",
+      "name": "Switch 540 Flip Revert",
+      "trick": "540_flip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 11
+    },
+    {
+      "id": "regular_laser_flip",
+      "name": "Laser Flip",
+      "trick": "laser_flip",
+      "stance": "regular",
+      "points": 7
+    },
+    {
+      "id": "regular_laser_flip_revert",
+      "name": "Laser Flip Revert",
+      "trick": "laser_flip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "fakie_laser_flip",
+      "name": "Fakie Laser Flip",
+      "trick": "laser_flip",
+      "stance": "fakie",
+      "points": 8
+    },
+    {
+      "id": "fakie_laser_flip_revert",
+      "name": "Fakie Laser Flip Revert",
+      "trick": "laser_flip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "nollie_laser_flip",
+      "name": "Nollie Laser Flip",
+      "trick": "laser_flip",
+      "stance": "nollie",
+      "points": 8
+    },
+    {
+      "id": "nollie_laser_flip_revert",
+      "name": "Nollie Laser Flip Revert",
+      "trick": "laser_flip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "switch_laser_flip",
+      "name": "Switch Laser Flip",
+      "trick": "laser_flip",
+      "stance": "switch",
+      "points": 9
+    },
+    {
+      "id": "switch_laser_flip_revert",
+      "name": "Switch Laser Flip Revert",
+      "trick": "laser_flip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 10
+    },
+    {
+      "id": "regular_big_heel",
+      "name": "Big Heel",
+      "trick": "big_heel",
+      "stance": "regular",
+      "points": 6
+    },
+    {
+      "id": "fakie_big_heel",
+      "name": "Fakie Big Heel",
+      "trick": "big_heel",
+      "stance": "fakie",
+      "points": 7
+    },
+    {
+      "id": "nollie_big_heel",
+      "name": "Nollie Big Heel",
+      "trick": "big_heel",
+      "stance": "nollie",
+      "points": 7
+    },
+    {
+      "id": "switch_big_heel",
+      "name": "Switch Big Heel",
+      "trick": "big_heel",
+      "stance": "switch",
+      "points": 8
+    },
+    {
+      "id": "regular_big_double_heel",
+      "name": "Big Double Heel",
+      "trick": "big_double_heel",
+      "stance": "regular",
+      "points": 8
+    },
+    {
+      "id": "fakie_big_double_heel",
+      "name": "Fakie Big Double Heel",
+      "trick": "big_double_heel",
+      "stance": "fakie",
+      "points": 9
+    },
+    {
+      "id": "nollie_big_double_heel",
+      "name": "Nollie Big Double Heel",
+      "trick": "big_double_heel",
+      "stance": "nollie",
+      "points": 9
+    },
+    {
+      "id": "switch_big_double_heel",
+      "name": "Switch Big Double Heel",
+      "trick": "big_double_heel",
+      "stance": "switch",
+      "points": 10
+    },
+    {
+      "id": "regular_bigger_heel",
+      "name": "Bigger Heel",
+      "trick": "bigger_heel",
+      "stance": "regular",
+      "points": 8
+    },
+    {
+      "id": "fakie_bigger_heel",
+      "name": "Fakie Bigger Heel",
+      "trick": "bigger_heel",
+      "stance": "fakie",
+      "points": 9
+    },
+    {
+      "id": "nollie_bigger_heel",
+      "name": "Nollie Bigger Heel",
+      "trick": "bigger_heel",
+      "stance": "nollie",
+      "points": 9
+    },
+    {
+      "id": "switch_bigger_heel",
+      "name": "Switch Bigger Heel",
+      "trick": "bigger_heel",
+      "stance": "switch",
+      "points": 10
+    },
+    {
+      "id": "regular_laser_double_flip",
+      "name": "Laser Double Flip",
+      "trick": "laser_double_flip",
+      "stance": "regular",
+      "points": 9
+    },
+    {
+      "id": "regular_laser_double_flip_revert",
+      "name": "Laser Double Flip Revert",
+      "trick": "laser_double_flip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 10
+    },
+    {
+      "id": "fakie_laser_double_flip",
+      "name": "Fakie Laser Double Flip",
+      "trick": "laser_double_flip",
+      "stance": "fakie",
+      "points": 10
+    },
+    {
+      "id": "fakie_laser_double_flip_revert",
+      "name": "Fakie Laser Double Flip Revert",
+      "trick": "laser_double_flip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 11
+    },
+    {
+      "id": "nollie_laser_double_flip",
+      "name": "Nollie Laser Double Flip",
+      "trick": "laser_double_flip",
+      "stance": "nollie",
+      "points": 10
+    },
+    {
+      "id": "nollie_laser_double_flip_revert",
+      "name": "Nollie Laser Double Flip Revert",
+      "trick": "laser_double_flip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 11
+    },
+    {
+      "id": "switch_laser_double_flip",
+      "name": "Switch Laser Double Flip",
+      "trick": "laser_double_flip",
+      "stance": "switch",
+      "points": 11
+    },
+    {
+      "id": "switch_laser_double_flip_revert",
+      "name": "Switch Laser Double Flip Revert",
+      "trick": "laser_double_flip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 12
+    },
+    {
+      "id": "regular_540_laser",
+      "name": "540 Laser",
+      "trick": "540_laser",
+      "stance": "regular",
+      "points": 10
+    },
+    {
+      "id": "regular_540_laser_revert",
+      "name": "540 Laser Revert",
+      "trick": "540_laser",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 11
+    },
+    {
+      "id": "fakie_540_laser",
+      "name": "Fakie 540 Laser",
+      "trick": "540_laser",
+      "stance": "fakie",
+      "points": 11
+    },
+    {
+      "id": "fakie_540_laser_revert",
+      "name": "Fakie 540 Laser Revert",
+      "trick": "540_laser",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 12
+    },
+    {
+      "id": "nollie_540_laser",
+      "name": "Nollie 540 Laser",
+      "trick": "540_laser",
+      "stance": "nollie",
+      "points": 11
+    },
+    {
+      "id": "nollie_540_laser_revert",
+      "name": "Nollie 540 Laser Revert",
+      "trick": "540_laser",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 12
+    },
+    {
+      "id": "switch_540_laser",
+      "name": "Switch 540 Laser",
+      "trick": "540_laser",
+      "stance": "switch",
+      "points": 12
+    },
+    {
+      "id": "switch_540_laser_revert",
+      "name": "Switch 540 Laser Revert",
+      "trick": "540_laser",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 13
+    },
+    {
+      "id": "regular_impossible",
+      "name": "Impossible",
+      "trick": "impossible",
+      "stance": "regular",
+      "points": 5
+    },
+    {
+      "id": "regular_impossible_revert",
+      "name": "Impossible Revert",
+      "trick": "impossible",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 6
+    },
+    {
+      "id": "fakie_impossible",
+      "name": "Fakie Impossible",
+      "trick": "impossible",
+      "stance": "fakie",
+      "points": 6
+    },
+    {
+      "id": "fakie_impossible_revert",
+      "name": "Fakie Impossible Revert",
+      "trick": "impossible",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "nollie_impossible",
+      "name": "Nollie Impossible",
+      "trick": "impossible",
+      "stance": "nollie",
+      "points": 6
+    },
+    {
+      "id": "nollie_impossible_revert",
+      "name": "Nollie Impossible Revert",
+      "trick": "impossible",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "switch_impossible",
+      "name": "Switch Impossible",
+      "trick": "impossible",
+      "stance": "switch",
+      "points": 7
+    },
+    {
+      "id": "switch_impossible_revert",
+      "name": "Switch Impossible Revert",
+      "trick": "impossible",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "regular_feather_flip",
+      "name": "Feather Flip",
+      "trick": "feather_flip",
+      "stance": "regular",
+      "points": 6
+    },
+    {
+      "id": "regular_feather_flip_revert",
+      "name": "Feather Flip Revert",
+      "trick": "feather_flip",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "fakie_feather_flip",
+      "name": "Fakie Feather Flip",
+      "trick": "feather_flip",
+      "stance": "fakie",
+      "points": 7
+    },
+    {
+      "id": "fakie_feather_flip_revert",
+      "name": "Fakie Feather Flip Revert",
+      "trick": "feather_flip",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "nollie_feather_flip",
+      "name": "Nollie Feather Flip",
+      "trick": "feather_flip",
+      "stance": "nollie",
+      "points": 7
+    },
+    {
+      "id": "nollie_feather_flip_revert",
+      "name": "Nollie Feather Flip Revert",
+      "trick": "feather_flip",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "switch_feather_flip",
+      "name": "Switch Feather Flip",
+      "trick": "feather_flip",
+      "stance": "switch",
+      "points": 8
+    },
+    {
+      "id": "switch_feather_flip_revert",
+      "name": "Switch Feather Flip Revert",
+      "trick": "feather_flip",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "regular_front_finger_impossible",
+      "name": "Front Finger Impossible",
+      "trick": "front_finger_impossible",
+      "stance": "regular",
+      "points": 6
+    },
+    {
+      "id": "regular_front_finger_impossible_revert",
+      "name": "Front Finger Impossible Revert",
+      "trick": "front_finger_impossible",
+      "stance": "regular",
+      "modifier": "revert",
+      "points": 7
+    },
+    {
+      "id": "fakie_front_finger_impossible",
+      "name": "Fakie Front Finger Impossible",
+      "trick": "front_finger_impossible",
+      "stance": "fakie",
+      "points": 7
+    },
+    {
+      "id": "fakie_front_finger_impossible_revert",
+      "name": "Fakie Front Finger Impossible Revert",
+      "trick": "front_finger_impossible",
+      "stance": "fakie",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "nollie_front_finger_impossible",
+      "name": "Nollie Front Finger Impossible",
+      "trick": "front_finger_impossible",
+      "stance": "nollie",
+      "points": 7
+    },
+    {
+      "id": "nollie_front_finger_impossible_revert",
+      "name": "Nollie Front Finger Impossible Revert",
+      "trick": "front_finger_impossible",
+      "stance": "nollie",
+      "modifier": "revert",
+      "points": 8
+    },
+    {
+      "id": "switch_front_finger_impossible",
+      "name": "Switch Front Finger Impossible",
+      "trick": "front_finger_impossible",
+      "stance": "switch",
+      "points": 8
+    },
+    {
+      "id": "switch_front_finger_impossible_revert",
+      "name": "Switch Front Finger Impossible Revert",
+      "trick": "front_finger_impossible",
+      "stance": "switch",
+      "modifier": "revert",
+      "points": 9
+    },
+    {
+      "id": "regular_no_comply_ollie",
+      "name": "No-Comply Ollie",
+      "trick": "no_comply_ollie",
+      "stance": "regular",
+      "points": 2
+    },
+    {
+      "id": "fakie_no_comply_ollie",
+      "name": "Fakie No-Comply Ollie",
+      "trick": "no_comply_ollie",
+      "stance": "fakie",
+      "points": 3
+    },
+    {
+      "id": "regular_impossible_sex_change",
+      "name": "Impossible Sex Change",
+      "trick": "impossible_sex_change",
+      "stance": "regular",
+      "points": 7
+    },
+    {
+      "id": "fakie_impossible_sex_change",
+      "name": "Fakie Impossible Sex Change",
+      "trick": "impossible_sex_change",
+      "stance": "fakie",
+      "points": 8
+    },
+    {
+      "id": "nollie_impossible_sex_change",
+      "name": "Nollie Impossible Sex Change",
+      "trick": "impossible_sex_change",
+      "stance": "nollie",
+      "points": 8
+    },
+    {
+      "id": "switch_impossible_sex_change",
+      "name": "Switch Impossible Sex Change",
+      "trick": "impossible_sex_change",
+      "stance": "switch",
+      "points": 9
+    },
+    {
+      "id": "regular_kickflip_cross_foot",
+      "name": "Kickflip Cross Foot",
+      "trick": "kickflip_cross_foot",
+      "stance": "regular",
+      "points": 4
+    },
+    {
+      "id": "fakie_kickflip_cross_foot",
+      "name": "Fakie Kickflip Cross Foot",
+      "trick": "kickflip_cross_foot",
+      "stance": "fakie",
+      "points": 5
+    },
+    {
+      "id": "nollie_kickflip_cross_foot",
+      "name": "Nollie Kickflip Cross Foot",
+      "trick": "kickflip_cross_foot",
+      "stance": "nollie",
+      "points": 5
+    },
+    {
+      "id": "switch_kickflip_cross_foot",
+      "name": "Switch Kickflip Cross Foot",
+      "trick": "kickflip_cross_foot",
+      "stance": "switch",
+      "points": 6
+    },
+    {
+      "id": "regular_double_flip_cross_foot",
+      "name": "Double Flip Cross Foot",
+      "trick": "double_flip_cross_foot",
+      "stance": "regular",
+      "points": 6
+    },
+    {
+      "id": "fakie_double_flip_cross_foot",
+      "name": "Fakie Double Flip Cross Foot",
+      "trick": "double_flip_cross_foot",
+      "stance": "fakie",
+      "points": 7
+    },
+    {
+      "id": "nollie_double_flip_cross_foot",
+      "name": "Nollie Double Flip Cross Foot",
+      "trick": "double_flip_cross_foot",
+      "stance": "nollie",
+      "points": 7
+    },
+    {
+      "id": "switch_double_flip_cross_foot",
+      "name": "Switch Double Flip Cross Foot",
+      "trick": "double_flip_cross_foot",
+      "stance": "switch",
+      "points": 8
+    },
+    {
+      "id": "regular_fs_360_kickflip",
+      "name": "Frontside 360 Kickflip",
+      "trick": "fs_360_kickflip",
+      "stance": "regular",
+      "points": 8
+    },
+    {
+      "id": "fakie_fs_360_kickflip",
+      "name": "Fakie Frontside 360 Kickflip",
+      "trick": "fs_360_kickflip",
+      "stance": "fakie",
+      "points": 9
+    },
+    {
+      "id": "regular_heelflip_cross_foot",
+      "name": "Heelflip Cross Foot",
+      "trick": "heelflip_cross_foot",
+      "stance": "regular",
+      "points": 4
+    },
+    {
+      "id": "fakie_heelflip_cross_foot",
+      "name": "Fakie Heelflip Cross Foot",
+      "trick": "heelflip_cross_foot",
+      "stance": "fakie",
+      "points": 5
+    },
+    {
+      "id": "nollie_heelflip_cross_foot",
+      "name": "Nollie Heelflip Cross Foot",
+      "trick": "heelflip_cross_foot",
+      "stance": "nollie",
+      "points": 5
+    },
+    {
+      "id": "switch_heelflip_cross_foot",
+      "name": "Switch Heelflip Cross Foot",
+      "trick": "heelflip_cross_foot",
+      "stance": "switch",
+      "points": 6
+    },
+    {
+      "id": "regular_double_heelflip_cross_foot",
+      "name": "Double Heelflip Cross Foot",
+      "trick": "double_heelflip_cross_foot",
+      "stance": "regular",
+      "points": 6
+    },
+    {
+      "id": "fakie_double_heelflip_cross_foot",
+      "name": "Fakie Double Heelflip Cross Foot",
+      "trick": "double_heelflip_cross_foot",
+      "stance": "fakie",
+      "points": 7
+    },
+    {
+      "id": "nollie_double_heelflip_cross_foot",
+      "name": "Nollie Double Heelflip Cross Foot",
+      "trick": "double_heelflip_cross_foot",
+      "stance": "nollie",
+      "points": 7
+    },
+    {
+      "id": "switch_double_heelflip_cross_foot",
+      "name": "Switch Double Heelflip Cross Foot",
+      "trick": "double_heelflip_cross_foot",
+      "stance": "switch",
+      "points": 8
+    }
+  ]
+}

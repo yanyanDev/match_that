@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "thresholds": { "intermediate": 5, "advanced": 8 },
+  "stances": [
+    { "id": "regular", "name": "",       "points": 0 },
+    { "id": "fakie",   "name": "Fakie",  "points": 1 },
+    { "id": "nollie",  "name": "Nollie", "points": 1 },
+    { "id": "switch",  "name": "Switch", "points": 2 }
+  ],
+  "modifiers": [
+    { "id": "fs180",  "type": "rotation", "name": "Frontside 180", "points": 1, "stances": ["regular", "fakie", "nollie", "switch"] },
+    { "id": "bs180",  "type": "rotation", "name": "Backside 180",  "points": 1, "stances": ["regular", "fakie", "nollie", "switch"] },
+    { "id": "bs360",  "type": "rotation", "name": "Backside 360",  "points": 3, "stances": ["regular", "fakie", "nollie"] },
+    { "id": "fs360",  "type": "rotation", "name": "Frontside 360", "points": 3, "stances": ["switch"] },
+    { "id": "revert", "type": "revert",   "name": "Revert",        "points": 1, "stances": ["regular", "fakie", "nollie", "switch"] }
+  ],
+  "tricks": [
+    { "id": "ollie", "name": "Ollie", "points": 1, "modifiers": ["fs180", "bs180", "bs360", "fs360"],
+      "customNames": [
+        { "stance": "nollie", "name": "Nollie" },
+        { "modifier": "fs180", "name": "Frontside 180" },
+        { "modifier": "bs180", "name": "Backside 180" },
+        { "modifier": "bs360", "name": "Backside 360" },
+        { "modifier": "fs360", "name": "Frontside 360" },
+        { "stance": "fakie", "modifier": "bs180", "name": "Halfcab Ollie" },
+        { "stance": "fakie", "modifier": "bs360", "name": "Full Cab Ollie" }
+      ] },
+    { "id": "pop_shuv",    "name": "Pop Shuv",     "points": 1, "modifiers": ["revert"] },
+    { "id": "front_shuv",  "name": "Front Shuv",   "points": 2, "modifiers": ["revert"] },
+    { "id": "360_shuv",    "name": "360 Shuv",     "points": 3, "modifiers": ["revert"] },
+    { "id": "fs_360_shuv", "name": "FS 360 Shuv",  "points": 4, "modifiers": ["revert"] },
+    { "id": "bs_bigspin",    "name": "BS Bigspin",    "points": 4, "modifiers": [] },
+    { "id": "fs_bigspin",    "name": "FS Bigspin",    "points": 5, "modifiers": [] },
+    { "id": "bs_biggerspin", "name": "BS Biggerspin", "points": 6, "modifiers": [] },
+    { "id": "fs_biggerspin", "name": "FS Biggerspin", "points": 7, "modifiers": [] },
+    { "id": "kickflip", "name": "Kickflip", "points": 2, "modifiers": ["fs180", "bs180", "bs360", "fs360"],
+      "customNames": [
+        { "stance": "fakie", "modifier": "bs180", "name": "Halfcab Flip" },
+        { "stance": "fakie", "modifier": "bs360", "name": "Full Cab Flip" }
+      ] },
+    { "id": "double_flip", "name": "Double Flip", "points": 4, "modifiers": ["fs180", "bs180", "bs360", "fs360"],
+      "customNames": [
+        { "stance": "fakie", "modifier": "bs180", "name": "Halfcab Double Flip" },
+        { "stance": "fakie", "modifier": "bs360", "name": "Full Cab Double Flip" }
+      ] },
+    { "id": "heelflip", "name": "Heelflip", "points": 2, "modifiers": ["fs180", "bs180", "bs360", "fs360"],
+      "customNames": [
+        { "stance": "fakie", "modifier": "bs180", "name": "Halfcab Heel" },
+        { "stance": "fakie", "modifier": "bs360", "name": "Full Cab Heel" }
+      ] },
+    { "id": "double_heel", "name": "Double Heel", "points": 4, "modifiers": ["fs180", "bs180", "bs360", "fs360"],
+      "customNames": [
+        { "stance": "fakie", "modifier": "bs180", "name": "Halfcab Double Heel" },
+        { "stance": "fakie", "modifier": "bs360", "name": "Full Cab Double Heel" }
+      ] },
+    { "id": "varial_flip",        "name": "Varial Flip",        "points": 3, "modifiers": ["revert"] },
+    { "id": "nightmare_flip",     "name": "Nightmare Flip",     "points": 6, "modifiers": ["revert"] },
+    { "id": "varial_heel",        "name": "Varial Heel",        "points": 3, "modifiers": ["revert"] },
+    { "id": "varial_double_heel", "name": "Varial Double Heel", "points": 6, "modifiers": ["revert"] },
+    { "id": "hardflip", "name": "Hardflip", "points": 4, "modifiers": ["revert"],
+      "customNames": [ { "modifier": "revert", "name": "Ghetto Bird" } ] },
+    { "id": "hard_double_flip", "name": "Hard Double Flip", "points": 7, "modifiers": ["revert"] },
+    { "id": "360_hardflip", "name": "360 Hardflip", "points": 7, "modifiers": ["revert"],
+      "customNames": [ { "modifier": "revert", "name": "360 Ghetto Bird" } ] },
+    { "id": "inward_heel",        "name": "Inward Heel",        "points": 4, "modifiers": ["revert"] },
+    { "id": "inward_double_heel", "name": "Inward Double Heel", "points": 7, "modifiers": [] },
+    { "id": "360_inward_heel",    "name": "360 Inward Heel",    "points": 7, "modifiers": ["revert"] },
+    { "id": "tre_flip",           "name": "Tre Flip",           "points": 5, "modifiers": ["revert"] },
+    { "id": "big_flip",           "name": "Big Flip",           "points": 6, "modifiers": [] },
+    { "id": "big_double_flip",    "name": "Big Double Flip",    "points": 8, "modifiers": [] },
+    { "id": "bigger_flip",        "name": "Bigger Flip",        "points": 8, "modifiers": [] },
+    { "id": "tre_double_flip",    "name": "Tre Double Flip",    "points": 8, "modifiers": ["revert"] },
+    { "id": "540_flip",           "name": "540 Flip",           "points": 8, "modifiers": ["revert"] },
+    { "id": "laser_flip",         "name": "Laser Flip",         "points": 7, "modifiers": ["revert"] },
+    { "id": "big_heel",           "name": "Big Heel",           "points": 6, "modifiers": [] },
+    { "id": "big_double_heel",    "name": "Big Double Heel",    "points": 8, "modifiers": [] },
+    { "id": "bigger_heel",        "name": "Bigger Heel",        "points": 8, "modifiers": [] },
+    { "id": "laser_double_flip",  "name": "Laser Double Flip",  "points": 9, "modifiers": ["revert"] },
+    { "id": "540_laser",          "name": "540 Laser",          "points": 10, "modifiers": ["revert"] },
+    { "id": "impossible",         "name": "Impossible",         "points": 5, "modifiers": ["revert"] },
+    { "id": "feather_flip",       "name": "Feather Flip",       "points": 6, "modifiers": ["revert"] },
+    { "id": "front_finger_impossible", "name": "Front Finger Impossible", "points": 6, "modifiers": ["revert"] },
+    { "id": "no_comply_ollie",       "name": "No-Comply Ollie",       "points": 2, "stances": ["regular", "fakie"], "modifiers": [] },
+    { "id": "impossible_sex_change", "name": "Impossible Sex Change", "points": 7, "modifiers": [] },
+    { "id": "kickflip_cross_foot",   "name": "Kickflip Cross Foot",   "points": 4, "modifiers": [] },
+    { "id": "double_flip_cross_foot","name": "Double Flip Cross Foot","points": 6, "modifiers": [] },
+    { "id": "fs_360_kickflip",       "name": "Frontside 360 Kickflip","points": 8, "stances": ["regular", "fakie"], "modifiers": [] },
+    { "id": "heelflip_cross_foot",   "name": "Heelflip Cross Foot",   "points": 4, "modifiers": [] },
+    { "id": "double_heelflip_cross_foot", "name": "Double Heelflip Cross Foot", "points": 6, "modifiers": [] }
+  ],
+  "deferred": {
+    "note": "Not used in v1. Kept so nothing from MATCH_THAT_Tricks.pdf is lost; needs its own grill + spec section.",
+    "challenges": [
+      { "name": "Nollie Frontside Heel - Fullcab Flip" },
+      { "name": "Kickflip - Fakie Flip - Nollie Flip - Switch Flip" },
+      { "name": "Straight 8",  "description": "Kickflip and Heelflip in all four stances" },
+      { "name": "Straight 12", "description": "Kickflip, Heelflip, and Tre Flip in all four stances" },
+      { "name": "Heelflip - Double Heel" },
+      { "name": "Kickflip - Double Flip" },
+      { "name": "Tre Flip - Tre Double Flip" },
+      { "name": "Big Heel - Switch Big Heel" },
+      { "name": "Straight Tres", "description": "Tre Flip in all four stances" }
+    ],
+    "spiceUps": [
+      { "name": "Eyes Closed!",     "description": "Do the challenge with your eyes closed or covering your eyes." },
+      { "name": "Back Me Up!",      "description": "Pick a homie to back you up. The homie you pick also gets the corresponding points." },
+      { "name": "Get Dizzy!",       "description": "Spin 5-10 times before attempting the trick/challenge." },
+      { "name": "This Ain't Mine!", "description": "Use the setup of the person next to you." },
+      { "name": "GAP!",             "description": "Do the trick over the phone.", "singleTricksOnly": true }
+    ]
+  }
+}
