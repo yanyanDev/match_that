@@ -46,13 +46,14 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 
 | # | Rule | Why |
 |---|------|-----|
-| T1 | A **flat list** of tricks, but each trick stores its **components** as separate fields: `stance`, `trick`, `modifier` (optional). | Playable now; combo generation later without data migration. |
+| T1 | Trick rules live in **`data/trick_rules.json`** (base tricks, stances, modifiers, allowed combinations, custom names — from `MATCH_THAT_Tricks.pdf`). A Dart script, **`tool/generate_tricks.dart`**, expands them into the **flat list** `assets/tricks.json` the app reads. Each entry keeps its components: `trick`, `stance`, `modifier` (optional). | Rules stay editable as rules; the app stays simple; ~320 combos without hand-writing them. |
 | T2 | **Flatground only** for v1. | No obstacle setup needed. |
-| T3 | **Points = base(trick) + stance bonus + modifier bonus**, with an optional per-trick `pointsOverride`. | Consistent scoring; ready for generated combos. |
+| T3 | **Points = base(trick) + stance bonus + modifier bonus**, computed by the generator and stored in `tricks.json`. A trick has at most **one modifier** (rotation or revert). | Consistent scoring across all combos. |
 | T4 | **Difficulty is derived from final points** (after override) via thresholds. | One number drives both score and bag — they can't disagree. |
 | T5 | Trick display is **name only** (no descriptions). | Audience knows trick names; description field can be added later. |
-| T6 | Library is a bundled, read-only **`assets/tricks.json`**, validated on load (malformed entries rejected). | Data separate from code; easy tuning. |
-| T7 | Target library size: **≥ 15–20 tricks per difficulty tier.** | Keeps bag exhaustion (T10) rare. |
+| T6 | `assets/tricks.json` is bundled and read-only. The parser returns tricks **plus a list of errors** (good entries still load); a test asserts the real file has **zero errors**. | Data typos fail a test, not a game. |
+| T6a | Trick rules (from the PDF): flatground only; no manuals, grinds, slides, grabs or footplants (except No-Comply Ollie). Body-360 rotations: **Backside 360 only** for Regular/Fakie/Nollie; **Frontside 360 only** for Switch. Custom names with a stance (e.g. Fakie + BS180 = "Halfcab Flip") fully override; custom names without a stance (e.g. Revert Hardflip = "Ghetto Bird") keep the stance prefix ("Nollie Ghetto Bird"). Naming order: stance · rotation · trick · revert. | Encoded as data in `trick_rules.json`. |
+| T7 | Target library size: **≥ 15–20 tricks per difficulty tier.** Current generated library: 324 tricks (70 / 138 / 116 at thresholds 5 / 8). | Keeps bag exhaustion (T10) rare. |
 
 ### Drawing tricks
 
@@ -101,7 +102,9 @@ Design follow-ups (not spec-dictated, decide during step 8): make Missed/Matched
 | Item | Why deferring is safe |
 |------|----------------------|
 | Rush mode details (timer length, button layout, nobody-lands case) | Shares the engine; only adds a mode-specific rule set. |
-| Generated combos | Components already stored separately (T1); points formula already component-based (T3). |
+| Custom challenges (multi-trick sequences) | Stored under `deferred` in `trick_rules.json`; need rules for scoring and one-attempt turns. |
+| Spice-up modifiers ("Eyes Closed!", "Back Me Up!", etc.) | Stored under `deferred`; "Back Me Up!" changes scoring (R6), so it needs its own grill. |
+| Rare modifiers, body varials | PDF defines a (rare) marker and mentions body varials, but none are used yet. |
 | Trick descriptions | Additive optional field. |
 | Mid-game save/resume | Engine state is plain data; becomes serialization work, not redesign. |
 | Custom tricks | JSON format already defined; needs editor UI + validation. |
@@ -117,7 +120,9 @@ Design follow-ups (not spec-dictated, decide during step 8): make Missed/Matched
 Each step is small, testable, and ends with a commit.
 
 0. **Project setup:** add `flutter_bloc`, `bloc_test`, `shared_preferences`, `wakelock_plus`; create `lib/engine/`, `lib/cubits/`, `lib/screens/`, `assets/tricks.json`; add a `CLAUDE.md` with conventions; commit this spec as `docs/SPEC.md`.
-1. **Trick model:** components, points formula, override, derived difficulty, JSON parsing + validation. *(tests first)*
+1. **Trick model** *(tests first)*:
+   - 1a. `Trick` model + parser for `assets/tricks.json`: derived difficulty from thresholds, validation errors list, "real file has zero errors" test.
+   - 1b. `tool/generate_tricks.dart`: expands `data/trick_rules.json`; tests for stance/rotation bans, custom-name rules, points formula; golden test that its output matches the committed `assets/tricks.json`.
 2. **Trick bags:** weighted tier roll, per-tier shuffle bags, discard removal, weight redistribution, all-empty signal. Use an injected seeded `Random`. *(tests first)*
 3. **Players & turns:** player list, random first player, turn advancement. *(tests first)*
 4. **Trick lifecycle (Default mode):** Landed/Missed, 2-round miss limit, tick-driven timer expiry, landed-count target, game over. *(tests first)*
