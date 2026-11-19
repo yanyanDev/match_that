@@ -60,9 +60,12 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | # | Rule |
 |---|------|
 | T8 | **Weighted mix** centered on game difficulty. Start weights (Beginner/Intermediate/Advanced tricks): Beginner game **80/20/0**, Intermediate **20/60/20**, Advanced **10/30/60**. |
+| T8a | Weights live in a Dart config object (`DrawWeights`) with the values above as defaults, passed into the draw; tests supply their own. Weights must be ≥ 0 and not all 0. |
 | T9 | **One shuffle bag per tier.** The weighted roll picks a tier; draw from that tier's bag without replacement; reshuffle when empty. |
+| T9a | After a reshuffle, the first trick drawn is never the same as the trick drawn just before it (unless it is the only trick left in that tier). |
+| T9b | Draw state is **immutable**: drawing returns the trick plus a new state, so undo can restore the exact previous state. `Random` is injected (seeded in tests). |
 | T10 | A **discarded** trick (timer expiry or miss-out) is **removed for the rest of the game**, even across reshuffles. |
-| T11 | If a tier's pool is empty, its weight is **redistributed proportionally** to non-empty tiers. If all tiers are empty, the game **ends automatically** (as End game). |
+| T11 | A tier is **unavailable** when all its tricks are discarded **or its weight is 0**. Unavailable tiers' weight is **redistributed proportionally** to available tiers. If no tier is available, the draw reports "no drawable tricks" and the game **ends automatically** (as End game). Landed tricks are not removed; they return at the next reshuffle. |
 
 ## 6. Players & setup
 
