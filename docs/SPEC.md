@@ -71,9 +71,12 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 
 | # | Rule |
 |---|------|
-| P1 | Player limits: **Default 2–8**, **Rush 2–4**. No solo. |
+| P1 | Player limits: **Default 2–8**, **Rush 2–4**. No solo. Limits are defined on a `GameMode` enum in the engine. |
 | P2 | Setup order: **mode first**, then players, difficulty, length. Player limit follows the mode, so invalid setups are impossible. |
 | P3 | Players get **editable default names** ("Player 1…") and an **auto-assigned color**. |
+| P3a | Names are **trimmed**; a blank name becomes "Player N" (N = seat number). Max **12 characters**. **Duplicates are blocked**, compared trimmed and case-insensitive (this includes a typed name that equals another seat's default, e.g. "player 2"). |
+| P3b | Colors come from a **fixed palette of 8**, assigned **by seat** (seat 1 = color 1). Not changeable in v1. The engine stores a `PlayerColor` value (no Flutter `Color`); the UI maps it to real colors. |
+| P5 | Players have an internal **id** separate from their name. Turn order is a list of seats; "next player" wraps around. Design it so a **subset** of players (sudden death, §3) can take turns in the same order. |
 | P4 | **Random first player** at game start (and on rematch); turns then follow setup order. |
 
 ## 7. Screens
