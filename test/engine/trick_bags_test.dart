@@ -9,6 +9,8 @@ import 'package:match_that/engine/trick.dart';
 import 'package:match_that/engine/trick_bags.dart';
 import 'package:match_that/engine/trick_parser.dart';
 
+import '../helpers/fake_random.dart';
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -30,31 +32,9 @@ List<Trick> tier(String prefix, int n, Difficulty difficulty) => [
 
 final onlyBeginner = DrawWeights(beginner: 1, intermediate: 0, advanced: 0);
 
-/// A `Random` that returns scripted `nextInt` values, in order.
-///
-/// The bags call `nextInt(totalAvailableWeight)` for the tier roll, then
-/// `nextInt(candidateCount)` for the trick.
-class FakeRandom implements Random {
-  FakeRandom(this._ints);
-
-  final List<int> _ints;
-  int _next = 0;
-
-  @override
-  int nextInt(int max) {
-    final value = _ints[_next++];
-    if (value >= max) {
-      throw StateError('scripted $value is out of range for nextInt($max)');
-    }
-    return value;
-  }
-
-  @override
-  double nextDouble() => throw UnimplementedError();
-
-  @override
-  bool nextBool() => throw UnimplementedError();
-}
+// FakeRandom (test/helpers/fake_random.dart): the bags call
+// `nextInt(totalAvailableWeight)` for the tier roll, then
+// `nextInt(candidateCount)` for the trick.
 
 /// Draws once and fails the test unless a trick came back.
 Drawn drawOk(TrickBags bags, DrawWeights weights, Random random) {
