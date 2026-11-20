@@ -53,10 +53,10 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | G5 | **Landed:** the current player gets the trick's points; landed count +1. If the target is reached → `gameOver`. Otherwise draw a new trick, advance the turn, and show the reveal. |
 | G6 | **Missed:** miss count +1 and the turn advances; the same trick continues with the clock still running. At **2 × player count** misses the trick is discarded (T10), the turn advances, and a new trick is revealed. |
 | G7 | **Timer expiry:** the trick is discarded (T10); the turn advances from the player whose turn it was; a new trick is revealed. |
-| G8 | During `reveal` the state exposes the **last outcome** (landed by player X for N points / timed out / missed out) so the UI can show "+3 ALEX", "TIME'S UP" or "MISSED OUT". |
+| G8 | The state exposes the **last outcome** (landed by player X for N points / timed out / missed out) so the UI can show "+3 ALEX", "TIME'S UP" or "MISSED OUT" during `reveal`. It is kept until the next trick ends. |
 | G9 | If a draw returns "no drawable tricks" (T11), the game goes to `gameOver` (as End game). |
 | G10 | `gameOver` exposes final scores and the **winner list** (everyone tied for the highest score). A tie with 2+ winners is resolved by sudden death in step 6; step 4 only reports it. |
-| G11 | The game state is **immutable** (every input returns a new state) and is built from the step 1–3 pieces: `TrickBags`, `TurnOrder`, players, `DrawWeights`. `Random` is injected. |
+| G11 | The game state is **immutable plain data** (every input returns a new state) built from the step 1–3 pieces: `TrickBags`, `TurnOrder`, players. The rules object holds what never changes during a game: config (including `DrawWeights`), the trick library and the injected `Random`. |
 
 ## 5. Trick library
 
