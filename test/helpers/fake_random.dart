@@ -27,3 +27,19 @@ class FakeRandom implements Random {
   @override
   bool nextBool() => throw UnimplementedError();
 }
+
+/// A `Random` whose `nextInt` always returns 0.
+///
+/// With it, the game starts at the first seat and tricks come out of a bag
+/// in library order, so a test can follow along without scripting every
+/// call.
+class ZeroRandom implements Random {
+  @override
+  int nextInt(int max) => 0;
+
+  @override
+  double nextDouble() => throw UnimplementedError();
+
+  @override
+  bool nextBool() => throw UnimplementedError();
+}

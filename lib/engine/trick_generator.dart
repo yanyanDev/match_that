@@ -27,7 +27,7 @@ class TrickRulesException implements Exception {
 /// The generator's output: thresholds plus every expanded trick, in order.
 class TrickLibrary {
   TrickLibrary({required this.thresholds, required List<Trick> tricks})
-      : tricks = List.unmodifiable(tricks);
+    : tricks = List.unmodifiable(tricks);
 
   final DifficultyThresholds thresholds;
   final List<Trick> tricks;
@@ -49,7 +49,8 @@ TrickLibrary generateTricks(String rulesSource) {
   final version = root['version'];
   if (version != supportedRulesVersion) {
     throw TrickRulesException(
-        'unsupported version $version (expected $supportedRulesVersion)');
+      'unsupported version $version (expected $supportedRulesVersion)',
+    );
   }
 
   final thresholds = _thresholds(root['thresholds']);
@@ -80,15 +81,21 @@ TrickLibrary generateTricks(String rulesSource) {
 
   final rawTricks = _list(root['tricks'], '"tricks"');
   for (var i = 0; i < rawTricks.length; i++) {
-    final expanded =
-        _expandTrick(rawTricks[i], 'tricks[$i]', stances, modifiers, thresholds);
+    final expanded = _expandTrick(
+      rawTricks[i],
+      'tricks[$i]',
+      stances,
+      modifiers,
+      thresholds,
+    );
     for (final trick in expanded) {
       if (!seenIds.add(trick.id)) {
         throw TrickRulesException('duplicate generated id "${trick.id}"');
       }
       if (!seenNames.add(trick.name)) {
         throw TrickRulesException(
-            'duplicate generated name "${trick.name}" (${trick.id})');
+          'duplicate generated name "${trick.name}" (${trick.id})',
+        );
       }
     }
     tricks.addAll(expanded);
@@ -154,8 +161,10 @@ List<Trick> _expandTrick(
 
   final customNames = [
     if (map.containsKey('customNames'))
-      for (final (i, c)
-          in _list(map['customNames'], '$where "customNames"').indexed)
+      for (final (i, c) in _list(
+        map['customNames'],
+        '$where "customNames"',
+      ).indexed)
         _CustomName.parse(c, '$where customNames[$i]', stances, modifiers),
   ];
   final usedCustomNames = <_CustomName>{};
@@ -167,22 +176,26 @@ List<Trick> _expandTrick(
       ...trickModifiers.where((m) => m.stances.contains(stance.id)),
     ]) {
       final points = basePoints + stance.points + (modifier?.points ?? 0);
-      result.add(Trick(
-        id: [stance.id, id, if (modifier != null) modifier.id].join('_'),
-        name: _name(name, stance, modifier, customNames, usedCustomNames),
-        trick: id,
-        stance: stance.stance,
-        modifier: modifier?.modifier,
-        points: points,
-        difficulty: thresholds.difficultyFor(points),
-      ));
+      result.add(
+        Trick(
+          id: [stance.id, id, if (modifier != null) modifier.id].join('_'),
+          name: _name(name, stance, modifier, customNames, usedCustomNames),
+          trick: id,
+          stance: stance.stance,
+          modifier: modifier?.modifier,
+          points: points,
+          difficulty: thresholds.difficultyFor(points),
+        ),
+      );
     }
   }
 
   for (final custom in customNames) {
     if (!usedCustomNames.contains(custom)) {
-      throw TrickRulesException('${custom.where}: "${custom.name}" matches '
-          'no generated trick');
+      throw TrickRulesException(
+        '${custom.where}: "${custom.name}" matches '
+        'no generated trick',
+      );
     }
   }
   return result;
@@ -211,8 +224,8 @@ String _name(
   final modifierOnly = modifier == null
       ? null
       : customNames
-          .where((c) => c.stance == null && c.modifier == modifier.id)
-          .firstOrNull;
+            .where((c) => c.stance == null && c.modifier == modifier.id)
+            .firstOrNull;
   if (modifierOnly != null) {
     used.add(modifierOnly);
     base = modifierOnly.name;
@@ -242,9 +255,12 @@ class _StanceDef {
   static _StanceDef parse(Object? raw, String where) {
     final map = _map(raw, where);
     final id = _string(map, 'id', where);
-    final stance = Stance.fromJson(id) ??
-        (throw TrickRulesException('$where: stance "$id" is unknown to the '
-            'app (see Stance in trick.dart)'));
+    final stance =
+        Stance.fromJson(id) ??
+        (throw TrickRulesException(
+          '$where: stance "$id" is unknown to the '
+          'app (see Stance in trick.dart)',
+        ));
     return _StanceDef(
       id,
       _string(map, 'name', where, allowEmpty: true),
@@ -256,7 +272,13 @@ class _StanceDef {
 
 class _ModifierDef {
   const _ModifierDef(
-      this.id, this.type, this.name, this.points, this.stances, this.modifier);
+    this.id,
+    this.type,
+    this.name,
+    this.points,
+    this.stances,
+    this.modifier,
+  );
 
   final String id;
 
@@ -270,16 +292,23 @@ class _ModifierDef {
   final Modifier modifier;
 
   static _ModifierDef parse(
-      Object? raw, String where, Map<String, _StanceDef> knownStances) {
+    Object? raw,
+    String where,
+    Map<String, _StanceDef> knownStances,
+  ) {
     final map = _map(raw, where);
     final id = _string(map, 'id', where);
-    final modifier = Modifier.fromJson(id) ??
-        (throw TrickRulesException('$where: modifier "$id" is unknown to the '
-            'app (see Modifier in trick.dart)'));
+    final modifier =
+        Modifier.fromJson(id) ??
+        (throw TrickRulesException(
+          '$where: modifier "$id" is unknown to the '
+          'app (see Modifier in trick.dart)',
+        ));
     final type = _string(map, 'type', where);
     if (type != 'rotation' && type != 'revert') {
       throw TrickRulesException(
-          '$where: "type" must be "rotation" or "revert", got "$type"');
+        '$where: "type" must be "rotation" or "revert", got "$type"',
+      );
     }
     final stances = _stringList(map['stances'], '$where "stances"');
     for (final s in stances) {
@@ -311,8 +340,12 @@ class _CustomName {
   /// Location in the rules file, for error messages.
   final String where;
 
-  static _CustomName parse(Object? raw, String where,
-      Map<String, _StanceDef> stances, Map<String, _ModifierDef> modifiers) {
+  static _CustomName parse(
+    Object? raw,
+    String where,
+    Map<String, _StanceDef> stances,
+    Map<String, _ModifierDef> modifiers,
+  ) {
     final map = _map(raw, where);
     final stance = map['stance'];
     final modifier = map['modifier'];
@@ -323,12 +356,17 @@ class _CustomName {
       throw TrickRulesException('$where: unknown modifier "$modifier"');
     }
     if (stance == null && modifier == null) {
-      throw TrickRulesException('$where: needs a "stance", a "modifier" '
-          'or both');
+      throw TrickRulesException(
+        '$where: needs a "stance", a "modifier" '
+        'or both',
+      );
     }
     return _CustomName(
-        stance as String?, modifier as String?, _string(map, 'name', where),
-        where);
+      stance as String?,
+      modifier as String?,
+      _string(map, 'name', where),
+      where,
+    );
   }
 }
 
@@ -342,7 +380,8 @@ DifficultyThresholds _thresholds(Object? raw) {
   final advanced = _int(map, 'advanced', 'thresholds', min: 1);
   if (intermediate >= advanced) {
     throw const TrickRulesException(
-        'thresholds: "intermediate" must be less than "advanced"');
+      'thresholds: "intermediate" must be less than "advanced"',
+    );
   }
   return DifficultyThresholds(intermediate: intermediate, advanced: advanced);
 }
@@ -363,8 +402,12 @@ List<String> _stringList(Object? raw, String where) {
   throw TrickRulesException('$where must be a list of strings');
 }
 
-String _string(Map<String, dynamic> map, String key, String where,
-    {bool allowEmpty = false}) {
+String _string(
+  Map<String, dynamic> map,
+  String key,
+  String where, {
+  bool allowEmpty = false,
+}) {
   final value = map[key];
   if (value is! String) {
     throw TrickRulesException('$where: "$key" must be a string');
@@ -375,8 +418,12 @@ String _string(Map<String, dynamic> map, String key, String where,
   return value;
 }
 
-int _int(Map<String, dynamic> map, String key, String where,
-    {required int min}) {
+int _int(
+  Map<String, dynamic> map,
+  String key,
+  String where, {
+  required int min,
+}) {
   final value = map[key];
   if (value is! int) {
     throw TrickRulesException('$where: "$key" must be an integer');
