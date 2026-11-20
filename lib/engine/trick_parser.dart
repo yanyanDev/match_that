@@ -38,8 +38,8 @@ class TrickParseResult {
     required List<Trick> tricks,
     required List<TrickParseError> errors,
     required this.thresholds,
-  })  : tricks = List.unmodifiable(tricks),
-        errors = List.unmodifiable(errors);
+  }) : tricks = List.unmodifiable(tricks),
+       errors = List.unmodifiable(errors);
 
   final List<Trick> tricks;
   final List<TrickParseError> errors;
@@ -51,10 +51,10 @@ class TrickParseResult {
 /// Parses the contents of `tricks.json`.
 TrickParseResult parseTricks(String source) {
   TrickParseResult fileError(String message) => TrickParseResult(
-        tricks: const [],
-        errors: [TrickParseError(message)],
-        thresholds: null,
-      );
+    tricks: const [],
+    errors: [TrickParseError(message)],
+    thresholds: null,
+  );
 
   final Object? root;
   try {
@@ -73,7 +73,8 @@ TrickParseResult parseTricks(String source) {
   }
   if (version != supportedTricksVersion) {
     return fileError(
-        'unsupported version $version (expected $supportedTricksVersion)');
+      'unsupported version $version (expected $supportedTricksVersion)',
+    );
   }
 
   final thresholdsOrError = _parseThresholds(root['thresholds']);
@@ -97,11 +98,17 @@ TrickParseResult parseTricks(String source) {
     if (trick != null) {
       if (!seenIds.add(trick.id)) {
         entryErrors.add(
-            TrickParseError('duplicate id', index: i, id: trick.id));
+          TrickParseError('duplicate id', index: i, id: trick.id),
+        );
       }
       if (!seenNames.add(trick.name)) {
-        entryErrors.add(TrickParseError('duplicate name "${trick.name}"',
-            index: i, id: trick.id));
+        entryErrors.add(
+          TrickParseError(
+            'duplicate name "${trick.name}"',
+            index: i,
+            id: trick.id,
+          ),
+        );
       }
     }
 
@@ -138,8 +145,7 @@ Object _parseThresholds(Object? raw) {
   if (intermediate >= advanced) {
     return '"thresholds.intermediate" must be less than "thresholds.advanced"';
   }
-  return DifficultyThresholds(
-      intermediate: intermediate, advanced: advanced);
+  return DifficultyThresholds(intermediate: intermediate, advanced: advanced);
 }
 
 /// Parses one entry. Adds every problem to [errors] and returns `null` if
