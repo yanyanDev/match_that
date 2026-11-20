@@ -58,8 +58,40 @@ class TurnBasedGame {
 
   /// Spends [elapsed] on the current phase, carrying any leftover into the
   /// next one (G3). Throws [ArgumentError] if [elapsed] is negative.
-  GameState tick(GameState state, Duration elapsed) =>
-      throw UnimplementedError('Round 2');
+  ///
+  /// Ends because every pass either returns or uses up the whole phase, and
+  /// outside gameOver `phaseRemaining` is always above 0 (zero-length phases
+  /// are skipped on entry; `trickTime` > 0). Each expiry also discards a
+  /// trick for good, so a huge tick ends in gameOver once tricks run out.
+  GameState tick(GameState state, Duration elapsed) {
+    if (elapsed.isNegative) {
+      throw ArgumentError.value(elapsed, 'elapsed', 'Must not be negative');
+    }
+    var s = state;
+    var left = elapsed;
+    while (left > Duration.zero && s.phase != GamePhase.gameOver) {
+      if (left < s.phaseRemaining) {
+        return s.copyWith(phaseRemaining: s.phaseRemaining - left);
+      }
+      left -= s.phaseRemaining;
+      s = _endPhase(s);
+    }
+    return s; // unchanged (same object) for a zero tick or in gameOver
+  }
+
+  /// What happens when the current phase's time runs out.
+  GameState _endPhase(GameState state) => switch (state.phase) {
+    GamePhase.countdown || GamePhase.reveal => state.copyWith(
+      phase: GamePhase.attempting,
+      phaseRemaining: config.trickTime,
+    ),
+    // G7: discard, the turn advances from the player whose turn it was.
+    GamePhase.attempting => _discard(
+      state.copyWith(turnOrder: state.turnOrder.advance()),
+      TimedOut(state.currentTrick!),
+    ),
+    GamePhase.gameOver => state,
+  };
 
   /// The current player landed the trick (R6, G5). Ignored outside
   /// [GamePhase.attempting] (G4).

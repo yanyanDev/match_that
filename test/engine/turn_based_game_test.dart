@@ -1,6 +1,9 @@
 // Spec §10 step 4 — trick lifecycle, Default mode (R1, R5–R8, §4a G1–G11).
 // Written test-first. Round 1: countdown and reveal are 0, no ticks.
+// Round 2: tick — phases, the trick timer, expiry, leftover time, ignored
+// input, and a whole scripted game.
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +12,7 @@ import 'package:match_that/engine/game_config.dart';
 import 'package:match_that/engine/game_state.dart';
 import 'package:match_that/engine/players.dart';
 import 'package:match_that/engine/trick.dart';
+import 'package:match_that/engine/trick_parser.dart';
 import 'package:match_that/engine/turn_based_game.dart';
 
 import '../helpers/fake_random.dart';
@@ -87,6 +91,39 @@ Matcher missedOut(String trickId) =>
     isA<MissedOut>().having((o) => o.trick.id, 'trick', trickId);
 
 List<String> ids(Iterable<Player> players) => [for (final p in players) p.id];
+
+Matcher timedOut(String trickId) =>
+    isA<TimedOut>().having((o) => o.trick.id, 'trick', trickId);
+
+Duration ms(int n) => Duration(milliseconds: n);
+Duration secs(int n) => Duration(seconds: n);
+
+/// A config with real phase lengths: by default 3 s countdown, 1 s reveal,
+/// 60 s per trick.
+GameConfig timed({
+  int target = 10,
+  Duration countdown = const Duration(seconds: 3),
+  Duration reveal = const Duration(seconds: 1),
+}) => GameConfig(
+  target: target,
+  weights: onlyBeginner,
+  countdown: countdown,
+  reveal: reveal,
+);
+
+/// The fields that make two states "the same game", for comparing runs.
+Map<String, Object?> summary(GameState s) => {
+  'phase': s.phase,
+  'left': s.phaseRemaining,
+  'trick': s.currentTrick?.id,
+  'turn': s.turnOrder.current,
+  'misses': s.missCount,
+  'landed': s.landedCount,
+  'scores': s.scores,
+  'outcome': s.lastOutcome?.toString(),
+  'discarded': s.bags.discardedIds,
+  'end': s.endReason,
+};
 
 void main() {
   // -------------------------------------------------------------------------
@@ -355,6 +392,382 @@ void main() {
       expect(
         [c.weights.beginner, c.weights.intermediate, c.weights.advanced],
         [20, 60, 20],
+      );
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Round 2
+  // -------------------------------------------------------------------------
+
+  group('countdown and phases (G2, G3)', () {
+    test('start is in countdown with config.countdown left', () {
+      final (_, s) = startGame(config: timed());
+
+      expect(s.phase, GamePhase.countdown);
+      expect(s.phaseRemaining, secs(3));
+      expect(s.currentTrick!.id, 'b0'); // drawn already, hidden by the UI
+    });
+
+    test('ticks reduce the countdown; the trick timer has not started', () {
+      final (game, start) = startGame(config: timed());
+
+      final s = game.tick(start, ms(2999));
+      expect(s.phase, GamePhase.countdown);
+      expect(s.phaseRemaining, ms(1));
+
+      final playing = game.tick(s, ms(1));
+      expect(playing.phase, GamePhase.attempting);
+      expect(playing.phaseRemaining, secs(60)); // full time, nothing used
+    });
+
+    test('many small ticks add up like one big one', () {
+      final (game, start) = startGame(config: timed());
+      final s = times(3, start, (s) => game.tick(s, secs(1)));
+
+      expect(s.phase, GamePhase.attempting);
+      expect(s.phaseRemaining, secs(60));
+    });
+
+    test('a tick that brings a phase to exactly 0 ends it', () {
+      final (game, start) = startGame(config: timed());
+
+      // Countdown: 3 s → 0 → attempting.
+      final playing = game.tick(start, secs(3));
+      expect(playing.phase, GamePhase.attempting);
+
+      // Reveal: 1 s → 0 → attempting.
+      final reveal = game.landed(playing);
+      expect(reveal.phase, GamePhase.reveal);
+      final next = game.tick(reveal, secs(1));
+      expect(next.phase, GamePhase.attempting);
+      expect(next.phaseRemaining, secs(60));
+
+      // Trick timer: 60 s → 0 → expired.
+      expect(game.tick(next, secs(60)).lastOutcome, timedOut('b1'));
+    });
+  });
+
+  group('trick timer (§4, G6, G7)', () {
+    test('ticks in attempting reduce the time left', () {
+      final (game, start) = startGame(config: timed(countdown: Duration.zero));
+
+      final s = game.tick(start, secs(1));
+      expect(s.phase, GamePhase.attempting);
+      expect(s.phaseRemaining, secs(59));
+      expect(game.tick(s, ms(250)).phaseRemaining, ms(58750));
+    });
+
+    test('a miss does not reset the clock', () {
+      final (game, start) = startGame(config: timed(countdown: Duration.zero));
+
+      final s = game.missed(game.tick(start, secs(10)));
+      expect(s.phaseRemaining, secs(50));
+      expect(s.missCount, 1);
+      expect(s.currentTrick!.id, 'b0');
+      expect(game.tick(s, secs(5)).phaseRemaining, secs(45));
+    });
+
+    test(
+      'after a landing and its reveal, the new trick gets the full time',
+      () {
+        final (game, start) = startGame(
+          config: timed(countdown: Duration.zero),
+        );
+
+        final reveal = game.landed(game.tick(start, secs(20)));
+        expect(reveal.phase, GamePhase.reveal);
+        expect(reveal.phaseRemaining, secs(1));
+        expect(reveal.currentTrick!.id, 'b1');
+        expect(reveal.currentPlayer.seat, 1); // reveal is in the next color
+
+        final s = game.tick(reveal, secs(1));
+        expect(s.phase, GamePhase.attempting);
+        expect(s.phaseRemaining, secs(60));
+      },
+    );
+
+    test(
+      'expiry: TimedOut, discarded, misses reset, turn advances, reveal',
+      () {
+        final (game, start) = startGame(
+          players: 3,
+          config: timed(countdown: Duration.zero),
+        );
+        final afterMiss = game.missed(start); // p1 misses → p2's turn, 1 miss
+
+        final s = game.tick(afterMiss, secs(60));
+        expect(s.lastOutcome, timedOut('b0'));
+        expect(s.bags.discardedIds, {'b0'});
+        expect(s.missCount, 0);
+        expect(s.currentPlayer.seat, 2); // advances from p2, whose turn it was
+        expect(s.phase, GamePhase.reveal);
+        expect(s.phaseRemaining, secs(1));
+        expect(s.currentTrick!.id, 'b1');
+        expect(s.scores, {'p1': 0, 'p2': 0, 'p3': 0});
+        expect(s.landedCount, 0);
+      },
+    );
+
+    test('expiry with a 0 reveal goes straight to the next trick', () {
+      final (game, start) = startGame(); // instant config
+      final s = game.tick(start, secs(60));
+
+      expect(s.lastOutcome, timedOut('b0'));
+      expect(s.phase, GamePhase.attempting);
+      expect(s.phaseRemaining, secs(60));
+      expect(s.currentTrick!.id, 'b1');
+      expect(s.currentPlayer.seat, 1);
+    });
+
+    test('expiry when nothing is drawable ends the game (G9)', () {
+      final (game, start) = startGame(library: [trick('only', 4)]);
+      final s = game.tick(start, secs(60));
+
+      expect(s.phase, GamePhase.gameOver);
+      expect(s.endReason, GameEndReason.noDrawableTricks);
+      expect(s.lastOutcome, timedOut('only'));
+      expect(s.currentTrick, isNull);
+    });
+  });
+
+  group('leftover time carries over (G3)', () {
+    test('countdown: a 3.5 s tick leaves 59.5 s on the trick', () {
+      final (game, start) = startGame(config: timed());
+      final s = game.tick(start, ms(3500));
+
+      expect(s.phase, GamePhase.attempting);
+      expect(s.phaseRemaining, ms(59500));
+    });
+
+    test('reveal: a 1.5 s tick during a 1 s reveal leaves 59.5 s', () {
+      final (game, start) = startGame(config: timed(countdown: Duration.zero));
+      final s = game.tick(game.landed(start), ms(1500));
+
+      expect(s.phase, GamePhase.attempting);
+      expect(s.phaseRemaining, ms(59500));
+      expect(s.currentTrick!.id, 'b1');
+    });
+
+    test('one long tick: end of a reveal, a full timeout, the next reveal', () {
+      final (game, start) = startGame(
+        players: 3,
+        config: timed(countdown: Duration.zero),
+      );
+      final reveal = game.landed(start); // p1 lands b0; reveal of b1 for p2
+
+      // 1 s reveal + 60 s for b1 (times out) + 0.5 s of b2's reveal.
+      final s = game.tick(reveal, ms(61500));
+      expect(s.phase, GamePhase.reveal);
+      expect(s.phaseRemaining, ms(500));
+      expect(s.lastOutcome, timedOut('b1'));
+      expect(s.bags.discardedIds, {'b1'});
+      expect(s.currentTrick!.id, 'b2');
+      expect(s.currentPlayer.seat, 2);
+      expect(s.scores, {'p1': 3, 'p2': 0, 'p3': 0});
+    });
+
+    test(
+      'one long tick gives the same state as the same time in small ticks',
+      () {
+        final (game, start) = startGame(
+          players: 3,
+          config: timed(countdown: Duration.zero),
+        );
+        final reveal = game.landed(start);
+
+        final once = game.tick(reveal, ms(61500));
+        final split = times(123, reveal, (s) => game.tick(s, ms(500)));
+        expect(summary(split), summary(once));
+      },
+    );
+
+    test(
+      'a 1-hour tick ends in gameOver once tricks run out',
+      () {
+        final (game, start) = startGame(config: timed());
+        final s = game.tick(start, const Duration(hours: 1));
+
+        expect(s.phase, GamePhase.gameOver);
+        expect(s.endReason, GameEndReason.noDrawableTricks);
+        expect(s.bags.discardedIds, {'b0', 'b1', 'b2'});
+        expect(s.lastOutcome, timedOut('b2'));
+        expect(s.landedCount, 0);
+      },
+      timeout: const Timeout(Duration(seconds: 5)), // fails, not hangs
+    );
+
+    test('a 1-hour tick with 0 countdown and 0 reveal also ends', () {
+      final (game, start) = startGame(); // instant config
+      final s = game.tick(start, const Duration(hours: 1));
+
+      expect(s.phase, GamePhase.gameOver);
+      expect(s.bags.discardedIds, {'b0', 'b1', 'b2'});
+    }, timeout: const Timeout(Duration(seconds: 5)));
+  });
+
+  group('ignored input (G4)', () {
+    test('landed and missed are ignored during the countdown', () {
+      final (game, s) = startGame(config: timed());
+      expect(game.landed(s), same(s));
+      expect(game.missed(s), same(s));
+    });
+
+    test('landed and missed are ignored during a reveal', () {
+      final (game, start) = startGame(config: timed(countdown: Duration.zero));
+      final s = game.landed(start);
+      expect(s.phase, GamePhase.reveal);
+
+      expect(game.landed(s), same(s));
+      expect(game.missed(s), same(s));
+    });
+
+    test('landed and missed are ignored after a tick expired the trick', () {
+      final (game, start) = startGame(config: timed(countdown: Duration.zero));
+      final s = game.tick(start, secs(60));
+      expect(s.lastOutcome, timedOut('b0'));
+
+      expect(game.landed(s), same(s));
+      expect(game.missed(s), same(s));
+    });
+
+    test('landed and missed are ignored in gameOver', () {
+      final (game, start) = startGame(config: instant(target: 1));
+      final s = game.landed(start);
+      expect(s.phase, GamePhase.gameOver);
+
+      expect(game.landed(s), same(s));
+      expect(game.missed(s), same(s));
+    });
+
+    test('ticks in gameOver change nothing', () {
+      final (game, start) = startGame(config: instant(target: 1));
+      final s = game.landed(start);
+      expect(game.tick(s, secs(10)), same(s));
+    });
+
+    test('a negative elapsed throws', () {
+      final (game, s) = startGame(config: timed());
+      expect(() => game.tick(s, ms(-1)), throwsArgumentError);
+    });
+
+    test('a zero elapsed changes nothing', () {
+      final (game, countdown) = startGame(config: timed());
+      expect(game.tick(countdown, Duration.zero), same(countdown));
+
+      final playing = game.tick(countdown, secs(3));
+      expect(game.tick(playing, Duration.zero), same(playing));
+    });
+  });
+
+  group('outcome and immutability (G8, G11)', () {
+    test('during a reveal, lastOutcome says how the previous trick ended', () {
+      final (game, start) = startGame(config: timed(countdown: Duration.zero));
+
+      final landed = game.landed(start);
+      expect(landed.phase, GamePhase.reveal);
+      expect(landed.lastOutcome, landedBy('b0', 'p1', 3));
+
+      final timeout = game.tick(landed, secs(61)); // reveal, then b1 expires
+      expect(timeout.phase, GamePhase.reveal);
+      expect(timeout.lastOutcome, timedOut('b1'));
+
+      final playing = game.tick(timeout, secs(1));
+      final missOut = times(4, playing, game.missed);
+      expect(missOut.phase, GamePhase.reveal);
+      expect(missOut.lastOutcome, missedOut('b2'));
+    });
+
+    test('lastOutcome is kept while the next trick is attempted', () {
+      final (game, start) = startGame(config: timed(countdown: Duration.zero));
+      final s = game.tick(game.landed(start), secs(1));
+
+      expect(s.phase, GamePhase.attempting);
+      expect(s.lastOutcome, landedBy('b0', 'p1', 3));
+    });
+
+    test('tick leaves the previous state unchanged', () {
+      final (game, start) = startGame(config: timed());
+      final before = summary(start);
+      game.tick(start, secs(3)); // ends the countdown
+      expect(summary(start), before);
+
+      final playing = game.tick(start, secs(3));
+      final beforePlaying = summary(playing);
+      game.tick(playing, secs(60)); // expires the trick
+      expect(summary(playing), beforePlaying);
+    });
+  });
+
+  group('whole game: scripted Quickplay', () {
+    final realLibrary = parseTricks(
+      File('assets/tricks.json').readAsStringSync(),
+    ).tricks;
+
+    /// Plays a full Quickplay game (real defaults and real library) with a
+    /// fixed script, repeated until gameOver. Returns the final state and
+    /// every outcome, in order.
+    (GameState, List<TrickOutcome>) play(int seed) {
+      final game = TurnBasedGame(
+        config: GameConfig.forSetup(
+          Difficulty.intermediate,
+          GameLength.quickplay,
+        ),
+        library: realLibrary,
+        random: Random(seed),
+      );
+      // Each pass: end the countdown/reveal, a miss then a landing, a
+      // miss-out (4 misses with 2 players), then a full timeout.
+      final script = <GameState Function(GameState)>[
+        (s) => game.tick(s, secs(3)),
+        game.missed,
+        game.landed,
+        (s) => game.tick(s, secs(1)),
+        game.missed,
+        game.missed,
+        game.missed,
+        game.missed,
+        (s) => game.tick(s, secs(1)),
+        (s) => game.tick(s, secs(60)),
+      ];
+
+      var s = game.start(makePlayers(2));
+      final outcomes = <TrickOutcome>[];
+      for (var step = 0; s.phase != GamePhase.gameOver; step++) {
+        if (step > 10000) fail('the game never ended');
+        final before = s.lastOutcome;
+        s = script[step % script.length](s);
+        final after = s.lastOutcome;
+        if (after != null && !identical(after, before)) outcomes.add(after);
+      }
+      return (s, outcomes);
+    }
+
+    test('reaches the target with every kind of outcome', () {
+      final (end, outcomes) = play(2026);
+
+      expect(end.endReason, GameEndReason.targetReached);
+      expect(end.landedCount, 10);
+      expect(outcomes.whereType<LandedBy>(), hasLength(10));
+      expect(outcomes.whereType<MissedOut>(), hasLength(9));
+      expect(outcomes.whereType<TimedOut>(), hasLength(9));
+      expect(end.bags.discardedIds, hasLength(18));
+
+      final pointsLanded = outcomes.whereType<LandedBy>().fold(
+        0,
+        (sum, o) => sum + o.points,
+      );
+      expect(end.scores.values.fold(0, (a, b) => a + b), pointsLanded);
+    });
+
+    test('the same seed and script give the same game', () {
+      final (endA, outcomesA) = play(2026);
+      final (endB, outcomesB) = play(2026);
+
+      expect(summary(endB), summary(endA));
+      expect(
+        [for (final o in outcomesB) o.toString()],
+        [for (final o in outcomesA) o.toString()],
       );
     });
   });
