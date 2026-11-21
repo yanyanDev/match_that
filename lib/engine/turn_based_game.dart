@@ -1,4 +1,5 @@
-/// The Default (turn-based) mode rules (spec R1, R5–R8, §4, §4a). Pure Dart.
+/// The Default (turn-based) mode rules (spec R1, R2, R5–R9, §4, §4a, §4b).
+/// Pure Dart.
 library;
 
 import 'dart:math';
@@ -63,44 +64,144 @@ class TurnBasedGame {
   /// outside gameOver `phaseRemaining` is always above 0 (zero-length phases
   /// are skipped on entry; `trickTime` > 0). Each expiry also discards a
   /// trick for good, so a huge tick ends in gameOver once tricks run out.
+  ///
+  /// While paused no time passes: the same state comes back (U1).
   GameState tick(GameState state, Duration elapsed) {
     if (elapsed.isNegative) {
       throw ArgumentError.value(elapsed, 'elapsed', 'Must not be negative');
     }
+    if (state.paused) return state;
     var s = state;
     var left = elapsed;
     while (left > Duration.zero && s.phase != GamePhase.gameOver) {
       if (left < s.phaseRemaining) {
-        return s.copyWith(phaseRemaining: s.phaseRemaining - left);
+        return _spend(s, left);
       }
       left -= s.phaseRemaining;
-      s = _endPhase(s);
+      s = _endPhase(_spend(s, s.phaseRemaining));
     }
     return s; // unchanged (same object) for a zero tick or in gameOver
   }
 
+  /// Spends [time] (at most what's left) on the current phase. Time in
+  /// attempting also moves the trick clock forward (U5).
+  GameState _spend(GameState state, Duration time) => state.copyWith(
+    phaseRemaining: state.phaseRemaining - time,
+    trickClock: state.phase == GamePhase.attempting
+        ? state.trickClock + time
+        : null,
+  );
+
   /// What happens when the current phase's time runs out.
   GameState _endPhase(GameState state) => switch (state.phase) {
-    GamePhase.countdown || GamePhase.reveal => state.copyWith(
+    GamePhase.countdown => _leaveCountdown(state),
+    GamePhase.reveal => state.copyWith(
       phase: GamePhase.attempting,
       phaseRemaining: config.trickTime,
     ),
     // G7: discard, the turn advances from the player whose turn it was.
+    // A timeout is not a call and clears the undo (U4).
     GamePhase.attempting => _discard(
-      state.copyWith(turnOrder: state.turnOrder.advance()),
+      state.copyWith(
+        turnOrder: state.turnOrder.advance(),
+        clearBeforeLastCall: true,
+      ),
       TimedOut(state.currentTrick!),
     ),
     GamePhase.gameOver => state,
   };
 
+  /// A resume countdown returns to the phase it saved (U2); the game-start
+  /// countdown goes to a full trick.
+  GameState _leaveCountdown(GameState state) {
+    final target = state.resumeTo;
+    if (target == null) {
+      return state.copyWith(
+        phase: GamePhase.attempting,
+        phaseRemaining: config.trickTime,
+      );
+    }
+    return state.copyWith(
+      phase: target.phase,
+      phaseRemaining: target.remaining,
+      clearResumeTo: true,
+    );
+  }
+
+  /// Stops the clock and opens the pause menu (R2, U1). Allowed in
+  /// countdown, attempting and reveal; ignored in gameOver or when already
+  /// paused.
+  GameState pause(GameState state) {
+    if (state.paused || state.phase == GamePhase.gameOver) return state;
+    return state.copyWith(paused: true);
+  }
+
+  /// Runs a full countdown, then goes back to the paused phase with the time
+  /// it had left (U2). Paused in a countdown, the countdown restarts and
+  /// still goes where it was going (a full trick, or the phase a resume
+  /// countdown saved). With a 0 countdown, goes straight back. Ignored when
+  /// not paused.
+  GameState resume(GameState state) {
+    if (!state.paused) return state;
+
+    final resuming = state.phase == GamePhase.countdown
+        ? state.copyWith(paused: false)
+        : state.copyWith(
+            paused: false,
+            phase: GamePhase.countdown,
+            resumeTo: ResumeTarget(state.phase, state.phaseRemaining),
+          );
+    return config.countdown > Duration.zero
+        ? resuming.copyWith(phaseRemaining: config.countdown)
+        : _leaveCountdown(resuming);
+  }
+
+  /// End game from the pause menu (R9, U7): gameOver now, current scores
+  /// decide the winners (G10). Ignored when not paused.
+  GameState endGame(GameState state) {
+    if (!state.paused) return state;
+    return _gameOver(
+      state.copyWith(paused: false, clearResumeTo: true),
+      GameEndReason.endedByPlayers,
+    );
+  }
+
+  /// Undo last call (U3–U6): the state from just before the last
+  /// `landed()`/`missed()`, minus the trick time spent since. If that leaves
+  /// no time, the restored trick times out at once (G7). The result is
+  /// paused, unless that timeout ended the game (G9). Ignored when
+  /// [GameState.canUndo] is false.
+  GameState undo(GameState state) {
+    if (!state.canUndo) return state;
+
+    final before = state.beforeLastCall!;
+    final spent = state.trickClock - before.trickClock;
+    final restored = before.copyWith(
+      phaseRemaining: before.phaseRemaining - spent,
+      trickClock: state.trickClock, // the clock never goes back (R3)
+    );
+    if (restored.phaseRemaining > Duration.zero) {
+      return restored.copyWith(paused: true);
+    }
+    final expired = _endPhase(restored);
+    return expired.phase == GamePhase.gameOver
+        ? expired
+        : expired.copyWith(paused: true);
+  }
+
+  /// [state] with no undo of its own: the snapshot a call stores (U3).
+  GameState _snapshot(GameState state) =>
+      state.copyWith(clearBeforeLastCall: true);
+
   /// The current player landed the trick (R6, G5). Ignored outside
-  /// [GamePhase.attempting] (G4).
+  /// [GamePhase.attempting] (G4) and while paused (U1).
   GameState landed(GameState state) {
-    if (state.phase != GamePhase.attempting) return state;
+    if (state.phase != GamePhase.attempting || state.paused) return state;
 
     final player = state.currentPlayer;
     final trick = state.currentTrick!;
     final scored = state.copyWith(
+      beforeLastCall: _snapshot(state),
       scores: {
         ...state.scores,
         player.id: state.scores[player.id]! + trick.points,
@@ -115,11 +216,12 @@ class TurnBasedGame {
   }
 
   /// The current player missed (R1, G6). Ignored outside
-  /// [GamePhase.attempting] (G4).
+  /// [GamePhase.attempting] (G4) and while paused (U1).
   GameState missed(GameState state) {
-    if (state.phase != GamePhase.attempting) return state;
+    if (state.phase != GamePhase.attempting || state.paused) return state;
 
     final next = state.copyWith(
+      beforeLastCall: _snapshot(state),
       missCount: state.missCount + 1,
       turnOrder: state.turnOrder.advance(),
     );
@@ -165,9 +267,13 @@ class TurnBasedGame {
     }
   }
 
+  /// Ends the game, never paused. Only a game that reached the target keeps
+  /// its undo, for the Results screen (U3).
   GameState _gameOver(GameState state, GameEndReason reason) => state.copyWith(
     phase: GamePhase.gameOver,
     phaseRemaining: Duration.zero,
     endReason: reason,
+    paused: false,
+    clearBeforeLastCall: reason != GameEndReason.targetReached,
   );
 }

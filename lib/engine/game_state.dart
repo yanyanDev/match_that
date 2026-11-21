@@ -12,8 +12,20 @@ import 'turn_order.dart';
 /// Where the game is (G2). The trick timer only runs in [attempting].
 enum GamePhase { countdown, attempting, reveal, gameOver }
 
-/// Why the game ended. Step 5 adds "ended from the pause menu".
-enum GameEndReason { targetReached, noDrawableTricks }
+/// Why the game ended. [endedByPlayers] is End game from the pause menu (U7).
+enum GameEndReason { targetReached, noDrawableTricks, endedByPlayers }
+
+/// Where a resume countdown returns to: the phase that was paused and the
+/// time it had left (U2).
+class ResumeTarget {
+  const ResumeTarget(this.phase, this.remaining);
+
+  final GamePhase phase;
+  final Duration remaining;
+
+  @override
+  String toString() => 'ResumeTarget(${phase.name}, $remaining)';
+}
 
 /// How the previous trick ended, so the UI can show "+3 ALEX",
 /// "TIME'S UP" or "MISSED OUT" (G8).
@@ -64,6 +76,10 @@ class GameState {
     required this.landedCount,
     required this.lastOutcome,
     required this.endReason,
+    this.paused = false,
+    this.resumeTo,
+    this.trickClock = Duration.zero,
+    this.beforeLastCall,
   }) : players = List.unmodifiable(players),
        scores = Map.unmodifiable(scores);
 
@@ -96,6 +112,34 @@ class GameState {
   /// Set exactly when [phase] is [GamePhase.gameOver].
   final GameEndReason? endReason;
 
+  /// Paused from the pause menu (U1). Separate from [phase] (G2): [phase]
+  /// and [phaseRemaining] keep what was paused, and no time passes.
+  final bool paused;
+
+  /// Set only during a resume countdown ([phase] is [GamePhase.countdown]):
+  /// where it returns to when it ends (U2). `null` for the game-start
+  /// countdown, which goes to a full trick.
+  final ResumeTarget? resumeTo;
+
+  /// Total time spent in [GamePhase.attempting] this game. Only ever goes
+  /// forward, also across an undo (R3). Undo uses the difference with the
+  /// snapshot's clock as "trick time spent since the call" (U5).
+  final Duration trickClock;
+
+  /// The state just before the last `landed()`/`missed()`: the one-step
+  /// undo snapshot (U3, U5). Its own [beforeLastCall] is always `null`.
+  /// Cleared by a timeout, End game, undo, or a game over that isn't the
+  /// target (U4).
+  final GameState? beforeLastCall;
+
+  /// Whether "Undo last call" is offered: from the pause menu, or on the
+  /// Results screen after reaching the target (U3).
+  bool get canUndo =>
+      beforeLastCall != null &&
+      (paused ||
+          (phase == GamePhase.gameOver &&
+              endReason == GameEndReason.targetReached));
+
   /// The player whose turn it is.
   Player get currentPlayer => _playerAt(turnOrder.current);
 
@@ -117,8 +161,8 @@ class GameState {
   /// A copy with the given fields replaced.
   ///
   /// `null` means "keep the current value", so a nullable field can't be
-  /// cleared this way; [clearCurrentTrick] does that for [currentTrick] (the
-  /// only one that ever goes back to `null`, in G9).
+  /// cleared this way; [clearCurrentTrick], [clearResumeTo] and
+  /// [clearBeforeLastCall] do that for the fields that go back to `null`.
   GameState copyWith({
     Map<String, int>? scores,
     TurnOrder? turnOrder,
@@ -131,6 +175,12 @@ class GameState {
     int? landedCount,
     TrickOutcome? lastOutcome,
     GameEndReason? endReason,
+    bool? paused,
+    ResumeTarget? resumeTo,
+    bool clearResumeTo = false,
+    Duration? trickClock,
+    GameState? beforeLastCall,
+    bool clearBeforeLastCall = false,
   }) => GameState(
     players: players,
     scores: scores ?? this.scores,
@@ -143,13 +193,19 @@ class GameState {
     landedCount: landedCount ?? this.landedCount,
     lastOutcome: lastOutcome ?? this.lastOutcome,
     endReason: endReason ?? this.endReason,
+    paused: paused ?? this.paused,
+    resumeTo: clearResumeTo ? null : resumeTo ?? this.resumeTo,
+    trickClock: trickClock ?? this.trickClock,
+    beforeLastCall: clearBeforeLastCall
+        ? null
+        : beforeLastCall ?? this.beforeLastCall,
   );
 
   Player _playerAt(int seat) => players.firstWhere((p) => p.seat == seat);
 
   @override
   String toString() =>
-      'GameState(${phase.name}, trick: ${currentTrick?.id}, '
+      'GameState(${phase.name}${paused ? ' (paused)' : ''}, trick: ${currentTrick?.id}, '
       'turn: ${turnOrder.current}, misses: $missCount, '
       'landed: $landedCount, scores: $scores, left: $phaseRemaining)';
 }
