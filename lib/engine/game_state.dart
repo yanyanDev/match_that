@@ -78,6 +78,8 @@ class GameState {
     required this.endReason,
     this.paused = false,
     this.resumeTo,
+    this.trickClock = Duration.zero,
+    this.beforeLastCall,
   }) : players = List.unmodifiable(players),
        scores = Map.unmodifiable(scores);
 
@@ -119,6 +121,25 @@ class GameState {
   /// countdown, which goes to a full trick.
   final ResumeTarget? resumeTo;
 
+  /// Total time spent in [GamePhase.attempting] this game. Only ever goes
+  /// forward, also across an undo (R3). Undo uses the difference with the
+  /// snapshot's clock as "trick time spent since the call" (U5).
+  final Duration trickClock;
+
+  /// The state just before the last `landed()`/`missed()`: the one-step
+  /// undo snapshot (U3, U5). Its own [beforeLastCall] is always `null`.
+  /// Cleared by a timeout, End game, undo, or a game over that isn't the
+  /// target (U4).
+  final GameState? beforeLastCall;
+
+  /// Whether "Undo last call" is offered: from the pause menu, or on the
+  /// Results screen after reaching the target (U3).
+  bool get canUndo =>
+      beforeLastCall != null &&
+      (paused ||
+          (phase == GamePhase.gameOver &&
+              endReason == GameEndReason.targetReached));
+
   /// The player whose turn it is.
   Player get currentPlayer => _playerAt(turnOrder.current);
 
@@ -140,8 +161,8 @@ class GameState {
   /// A copy with the given fields replaced.
   ///
   /// `null` means "keep the current value", so a nullable field can't be
-  /// cleared this way; [clearCurrentTrick] and [clearResumeTo] do that for
-  /// the fields that go back to `null`.
+  /// cleared this way; [clearCurrentTrick], [clearResumeTo] and
+  /// [clearBeforeLastCall] do that for the fields that go back to `null`.
   GameState copyWith({
     Map<String, int>? scores,
     TurnOrder? turnOrder,
@@ -157,6 +178,9 @@ class GameState {
     bool? paused,
     ResumeTarget? resumeTo,
     bool clearResumeTo = false,
+    Duration? trickClock,
+    GameState? beforeLastCall,
+    bool clearBeforeLastCall = false,
   }) => GameState(
     players: players,
     scores: scores ?? this.scores,
@@ -171,6 +195,10 @@ class GameState {
     endReason: endReason ?? this.endReason,
     paused: paused ?? this.paused,
     resumeTo: clearResumeTo ? null : resumeTo ?? this.resumeTo,
+    trickClock: trickClock ?? this.trickClock,
+    beforeLastCall: clearBeforeLastCall
+        ? null
+        : beforeLastCall ?? this.beforeLastCall,
   );
 
   Player _playerAt(int seat) => players.firstWhere((p) => p.seat == seat);
