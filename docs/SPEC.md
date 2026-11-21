@@ -58,6 +58,18 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | G10 | `gameOver` exposes final scores and the **winner list** (everyone tied for the highest score). A tie with 2+ winners is resolved by sudden death in step 6; step 4 only reports it. |
 | G11 | The game state is **immutable plain data** (every input returns a new state) built from the step 1–3 pieces: `TrickBags`, `TurnOrder`, players. The rules object holds what never changes during a game: config (including `DrawWeights`), the trick library and the injected `Random`. |
 
+## 4b. Pause, undo, end game (step 5)
+
+| # | Rule |
+|---|------|
+| U1 | **Pause** is allowed in `countdown`, `attempting` and `reveal` (not `gameOver`). While paused, no phase time passes: ticks change nothing and taps are ignored (G4). |
+| U2 | **Resume** runs the 3-2-1 countdown (`config.countdown`), then returns to the paused phase with the time it had left. If the game was paused **during a countdown**, resuming just runs a full countdown, then `attempting`. |
+| U3 | **Undo last call** reverses the most recent `landed()` or `missed()`. It is available **while paused** (pause menu) and in `gameOver` **only when the game ended by reaching the target** (Results screen). One step only: after an undo there is nothing more to undo. |
+| U4 | The undo is **cleared** by the next call, a timeout, End game, or using it. A timeout is not a call and can't be undone. |
+| U5 | Undo restores the state from **just before the call** (trick, scores, landed count, miss count, turn, bags — a newly drawn trick goes back in its bag and a miss-out discard is undone), then **subtracts the trick time spent since the call** (R3, R4). Only time in `attempting` counts — reveal, countdown and paused time do not. If that leaves the restored trick with ≤ 0 time, it **times out** immediately (G7). This one rule covers all three cases: a plain miss (same trick, clock unchanged), a landing, and a miss-out. |
+| U6 | After an undo the game is **paused**; Resume continues with the countdown. Undo from the Results screen returns to the paused game. |
+| U7 | **End game** (pause menu) goes to `gameOver` with reason "ended by players"; winners per G10 (a tie goes to sudden death, step 6). |
+
 ## 5. Trick library
 
 | # | Rule | Why |
