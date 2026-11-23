@@ -177,7 +177,8 @@ class TurnBasedGame {
 
   /// Undo last call (U3–U6): the state from just before the last
   /// `landed()`/`missed()`, minus the trick time spent since. If that leaves
-  /// no time, the restored trick times out at once (G7). The result is
+  /// no time, the restored trick times out at once (G7), except in sudden
+  /// death, which has no timer and spends no trick time (S8). The result is
   /// paused, unless that timeout ended the game (G9). Ignored when
   /// [GameState.canUndo] is false.
   GameState undo(GameState state) {
@@ -189,7 +190,8 @@ class TurnBasedGame {
       phaseRemaining: before.phaseRemaining - spent,
       trickClock: state.trickClock, // the clock never goes back (R3)
     );
-    if (restored.phaseRemaining > Duration.zero) {
+    // A sudden death trick has no timer (S3): its 0 left is not a timeout.
+    if (restored.inSuddenDeath || restored.phaseRemaining > Duration.zero) {
       return restored.copyWith(paused: true);
     }
     final expired = _endPhase(restored);
@@ -368,13 +370,13 @@ class TurnBasedGame {
   Duration _trickTime(GameState state) =>
       state.suddenDeath == null ? config.trickTime : Duration.zero;
 
-  /// Ends the game, never paused. Only a game that reached the target keeps
-  /// its undo, for the Results screen (U3).
+  /// Ends the game, never paused. Only a game ended by a call keeps its
+  /// undo, for the Results screen (U3, S8).
   GameState _gameOver(GameState state, GameEndReason reason) => state.copyWith(
     phase: GamePhase.gameOver,
     phaseRemaining: Duration.zero,
     endReason: reason,
     paused: false,
-    clearBeforeLastCall: reason != GameEndReason.targetReached,
+    clearBeforeLastCall: !reason.endedByCall,
   );
 }

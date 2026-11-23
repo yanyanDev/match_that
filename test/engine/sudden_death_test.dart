@@ -9,37 +9,9 @@
 // order (t0, t1, …).
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:match_that/engine/game_config.dart';
 import 'package:match_that/engine/game_state.dart';
-import 'package:match_that/engine/turn_based_game.dart';
 
 import '../helpers/game_helpers.dart';
-
-/// 2 players, target 2, 1-point tricks t0…t5: p1 lands t0, p2 lands t1 →
-/// 1–1 → sudden death, p1 to start on t2.
-(TurnBasedGame, GameState) tiedGame({GameConfig? config}) {
-  final (game, start) = startGame(
-    library: equalLibrary(6),
-    config: config ?? instant(target: 2),
-  );
-  return (game, play(game, start, 'LL'));
-}
-
-/// [players] players, target [players]: everyone lands one 1-point trick,
-/// so everyone ties and the last seat's landing starts sudden death. The
-/// library has [tricks] tricks.
-(TurnBasedGame, GameState) allTied(int players, {int tricks = 6}) {
-  final (game, start) = startGame(
-    players: players,
-    library: equalLibrary(tricks),
-    config: instant(target: players),
-  );
-  return (game, play(game, start, 'L' * players));
-}
-
-Matcher roundEnded(String trickId, List<String> outIds) => isA<RoundEnded>()
-    .having((RoundEnded o) => o.trick.id, 'trick', trickId)
-    .having((RoundEnded o) => o.outIds, 'outIds', outIds);
 
 void main() {
   group('S1: trigger', () {

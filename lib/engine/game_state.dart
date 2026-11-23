@@ -19,7 +19,11 @@ enum GameEndReason {
   targetReached,
   noDrawableTricks,
   endedByPlayers,
-  suddenDeathWon,
+  suddenDeathWon;
+
+  /// Whether a `landed()`/`missed()` call ended the game, so the Results
+  /// screen can undo it (U3, S8).
+  bool get endedByCall => this == targetReached || this == suddenDeathWon;
 }
 
 /// The current sudden death round (§3). Who is still in is not stored here:
@@ -209,12 +213,12 @@ class GameState {
   ];
 
   /// Whether "Undo last call" is offered: from the pause menu, or on the
-  /// Results screen after reaching the target (U3).
+  /// Results screen after a call ended the game: reaching the target, or
+  /// deciding sudden death (U3, S8).
   bool get canUndo =>
       beforeLastCall != null &&
       (paused ||
-          (phase == GamePhase.gameOver &&
-              endReason == GameEndReason.targetReached));
+          (phase == GamePhase.gameOver && (endReason?.endedByCall ?? false)));
 
   /// The player whose turn it is.
   Player get currentPlayer => _playerAt(turnOrder.current);
