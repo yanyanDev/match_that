@@ -317,7 +317,8 @@ void main() {
 
     test('End game clears it', () {
       final (game, start) = startGame(config: noCountdown);
-      final over = game.endGame(game.pause(game.missed(start)));
+      // p1 lands +3 (so no tie), p2 misses: there is a call to undo.
+      final over = game.endGame(game.pause(play(game, start, 'LM')));
 
       expect(over.endReason, GameEndReason.endedByPlayers);
       expect(over.canUndo, isFalse);

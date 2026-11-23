@@ -42,6 +42,22 @@ class TurnOrder {
     return TurnOrder(seats, current: seats[random.nextInt(seats.length)]);
   }
 
+  /// Starts at the first of [seats] at or after seat [atOrAfter], wrapping
+  /// to the first seat if there is none. [atOrAfter] doesn't have to be one
+  /// of [seats], so it can be a knocked-out player's seat: this is how
+  /// sudden death picks who starts a round (S6). Throws [ArgumentError] for
+  /// the same [seats] as the main constructor.
+  factory TurnOrder.from(List<int> seats, {required int atOrAfter}) {
+    if (seats.isEmpty) {
+      throw ArgumentError.value(seats, 'seats', 'Must not be empty');
+    }
+    final start = seats.firstWhere(
+      (seat) => seat >= atOrAfter,
+      orElse: () => seats.first,
+    );
+    return TurnOrder(seats, current: start);
+  }
+
   /// The seats taking turns, in setup order. Read-only.
   final List<int> seats;
 

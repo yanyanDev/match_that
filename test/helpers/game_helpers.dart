@@ -28,6 +28,30 @@ final library3 = [trick('b0', 3), trick('b1', 5), trick('b2', 7)];
 
 final onlyBeginner = DrawWeights(beginner: 1, intermediate: 0, advanced: 0);
 
+/// [n] beginner tricks t0…t(n-1), all worth 1 point, so ties are easy.
+List<Trick> equalLibrary(int n) => [
+  for (var i = 0; i < n; i++) trick('t$i', 1),
+];
+
+/// Ticks through a countdown or reveal, so the trick is being attempted.
+GameState toPlay(TurnBasedGame game, GameState s) =>
+    s.phase == GamePhase.attempting ? s : game.tick(s, s.phaseRemaining);
+
+/// Applies [calls] in order ('L' = landed, 'M' = missed), ticking through
+/// any countdown or reveal before each one.
+GameState play(TurnBasedGame game, GameState s, String calls) {
+  var state = s;
+  for (final call in calls.split('')) {
+    state = toPlay(game, state);
+    state = switch (call) {
+      'L' => game.landed(state),
+      'M' => game.missed(state),
+      _ => throw ArgumentError.value(call, 'calls', "Use 'L' or 'M'"),
+    };
+  }
+  return state;
+}
+
 /// [n] players with ids p1…pN at seats 0…N-1. Built directly (not with
 /// `buildPlayers`) so tests can also make invalid counts.
 List<Player> makePlayers(int n) => [
@@ -114,4 +138,34 @@ Map<String, Object?> summary(GameState s) => {
   'outcome': s.lastOutcome?.toString(),
   'discarded': s.bags.discardedIds,
   'end': s.endReason,
+  'remaining': s.turnOrder.seats,
+  'sd': s.suddenDeath?.toString(),
 };
+
+// Sudden death (step 6).
+
+/// 2 players, target 2, 1-point tricks t0…t5: p1 lands t0, p2 lands t1 →
+/// 1–1 → sudden death, p1 to start on t2.
+(TurnBasedGame, GameState) tiedGame({GameConfig? config}) {
+  final (game, start) = startGame(
+    library: equalLibrary(6),
+    config: config ?? instant(target: 2),
+  );
+  return (game, play(game, start, 'LL'));
+}
+
+/// [players] players, target [players]: everyone lands one 1-point trick,
+/// so everyone ties and the last seat's landing starts sudden death. The
+/// library has [tricks] tricks.
+(TurnBasedGame, GameState) allTied(int players, {int tricks = 6}) {
+  final (game, start) = startGame(
+    players: players,
+    library: equalLibrary(tricks),
+    config: instant(target: players),
+  );
+  return (game, play(game, start, 'L' * players));
+}
+
+Matcher roundEnded(String trickId, List<String> outIds) => isA<RoundEnded>()
+    .having((RoundEnded o) => o.trick.id, 'trick', trickId)
+    .having((RoundEnded o) => o.outIds, 'outIds', outIds);

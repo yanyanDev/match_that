@@ -24,13 +24,19 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | R9 | **End game** (pause menu) ends any game immediately; current scores decide the winner. | Escape hatch for games that stall (R8 can otherwise never terminate on a too-hard difficulty). |
 | R10 | Ties go to **sudden death** (see §3). | Decisive finish. |
 
-## 3. Sudden death
+## 3. Sudden death (step 6)
 
-- Only tied players participate. Each round, every remaining player gets **one attempt at the same trick**, in turn order.
-- Landers advance; missers are eliminated. **If everyone misses, nobody is eliminated** and a new trick is drawn.
-- Repeat until one player remains. If several land, they play another round.
-- Tricks come from the game's difficulty (assumed — confirm).
-- **End game** during sudden death → shared win among remaining players.
+| # | Rule |
+|---|------|
+| S1 | **Trigger:** when the game would end with **2+ winners** (G10) by reaching the target or by End game, sudden death starts among the tied players instead of `gameOver`. If it ended because **nothing is drawable** (G9), there's nothing to play: it's a **shared win**. When End game starts sudden death, round 1 gets a **freshly drawn** trick; the unfinished one is not discarded. |
+| S2 | Sudden death starts with the **countdown**; each later round's trick gets the **reveal**. |
+| S3 | **Rounds:** every remaining player gets **exactly one attempt** at the **same trick**, one call each (Matched or Missed). **No timer** in sudden death: ticks only run the countdown and reveal. |
+| S4 | **End of a round** (everyone remaining has called): landers stay, missers are out. **If nobody landed, nobody is out.** If exactly one player remains, they **win** (`gameOver`). Otherwise a new round starts with a **new trick**. |
+| S5 | **Tricks** are drawn with the **same weights as the game**, from the **same bags** (discards still apply). A trick everyone missed is **discarded** (T10); a trick someone landed is not. **No points** are scored in sudden death — scores stay as they were. |
+| S6 | **Order:** round 1 starts with the tied player who is **next in the game's turn order** when sudden death begins (after a deciding landing: the first tied player after the lander; after End game: the player whose turn it was if they're tied, otherwise the first tied player after them). Each later round starts with the **next remaining player after the previous round's starter** (wrapping, skipping eliminated players), so the start rotates. |
+| S7 | **Pause, Resume and End game** work as in §4b. **End game during sudden death** → `gameOver` with a **shared win** among the remaining players. |
+| S8 | **Undo** works as in §4b (one step; no trick clock in sudden death, so nothing is subtracted). It can undo a call that ended a round, and the call that **started** sudden death (back to normal play). From **Results**, it can undo the call that **decided** sudden death. |
+| S9 | If **nothing is drawable** during sudden death → `gameOver` with a **shared win** among the remaining players. |
 
 ## 4. Timer & app lifecycle
 
@@ -64,7 +70,7 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 |---|------|
 | U1 | **Pause** is allowed in `countdown`, `attempting` and `reveal` (not `gameOver`). While paused, no phase time passes: ticks change nothing and taps are ignored (G4). |
 | U2 | **Resume** runs the 3-2-1 countdown (`config.countdown`), then returns to the paused phase with the time it had left. If the game was paused **during a countdown**, resuming just runs a full countdown, then `attempting`. If it was paused **during a resume countdown**, resuming runs a full countdown, then returns to the originally paused phase with the time it had left. |
-| U3 | **Undo last call** reverses the most recent `landed()` or `missed()`. It is available **while paused** (pause menu) and in `gameOver` **only when the game ended by reaching the target** (Results screen). One step only: after an undo there is nothing more to undo. |
+| U3 | **Undo last call** reverses the most recent `landed()` or `missed()`. It is available **while paused** (pause menu) and in `gameOver` **only when the game ended by a call** — reaching the target, or the call that decided sudden death (S8) (Results screen). One step only: after an undo there is nothing more to undo. |
 | U4 | The undo is **cleared** by the next call, a timeout, End game, or using it. A timeout is not a call and can't be undone. |
 | U5 | Undo restores the state from **just before the call** (trick, scores, landed count, miss count, turn, bags — a newly drawn trick goes back in its bag and a miss-out discard is undone), then **subtracts the trick time spent since the call** (R3, R4). Only time in `attempting` counts — reveal, countdown and paused time do not. If that leaves the restored trick with ≤ 0 time, it **times out** immediately (G7). This one rule covers all three cases: a plain miss (same trick, clock unchanged), a landing, and a miss-out. |
 | U6 | After an undo the game is **paused**; Resume continues with the countdown. Undo from the Results screen returns to the paused game. |

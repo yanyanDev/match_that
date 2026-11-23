@@ -196,21 +196,22 @@ void main() {
       expect(ids(over.winners), ['p1']);
     });
 
-    test('a tie lists every tied player, in seat order', () {
-      // 3 players, seat 2 starts: p3 lands 2, then p1 lands 2.
+    test('a tie lists every tied player, in seat order, and goes to sudden '
+        'death instead of gameOver (S1)', () {
+      // 3 players, seat 2 starts: p3 lands 2, then p1 lands 2. The last two
+      // values are sudden death's first draw.
       final (game, start) = startGame(
         players: 3,
         library: [trick('x', 2), trick('y', 2)],
         config: instant(target: 2),
-        random: FakeRandom([2, 0, 0, 0, 0]),
+        random: FakeRandom([2, 0, 0, 0, 0, 0, 0]),
       );
-      final over = game.landed(game.landed(start));
+      final tied = game.landed(game.landed(start));
 
-      // Step 4 only reports the tie; sudden death is step 6 (G10).
-      expect(over.phase, GamePhase.gameOver);
-      expect(over.endReason, GameEndReason.targetReached);
-      expect(over.scores, {'p1': 2, 'p2': 0, 'p3': 2});
-      expect(ids(over.winners), ['p1', 'p3']);
+      expect(tied.phase, isNot(GamePhase.gameOver));
+      expect(tied.endReason, isNull);
+      expect(tied.scores, {'p1': 2, 'p2': 0, 'p3': 2});
+      expect(ids(tied.winners), ['p1', 'p3']);
     });
 
     test('with no points scored, everyone is tied', () {
