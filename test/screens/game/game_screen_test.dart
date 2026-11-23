@@ -1,76 +1,18 @@
 // Spec §10 step 8b — Game screen smoke tests (§7 D10), part 1: countdown,
 // play, reveal and sudden death views. Written test-first.
 //
-// The screen runs on a real GameCubit with a FakeClock: `clock.elapse(...)`
-// moves game time instantly, then the screen is redrawn (see elapse).
-// ZeroRandom: seat 0 (P1) starts and tricks come out in library order
-// (t0, t1, ...), each worth 1 point.
+// Setup and helpers (real GameCubit, FakeClock, ZeroRandom) are in
+// test/helpers/game_screen_helpers.dart.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:match_that/cubits/game_cubit.dart';
-import 'package:match_that/engine/game_config.dart';
 import 'package:match_that/engine/game_state.dart';
 import 'package:match_that/engine/players.dart';
-import 'package:match_that/screens/game/game_screen.dart';
-import 'package:match_that/ui/app_theme.dart';
 import 'package:match_that/ui/widgets/primary_button.dart';
 import 'package:match_that/ui/widgets/score_card.dart';
 import 'package:match_that/ui/widgets/secondary_button.dart';
 
-import '../../helpers/fake_clock.dart';
-import '../../helpers/fake_random.dart';
 import '../../helpers/game_helpers.dart';
-
-/// Shows a GameScreen for a new game on a phone-sized screen. Returns the
-/// Cubit (to check what a tap did) and the clock (to move time).
-Future<(GameCubit, FakeClock)> pumpGame(
-  WidgetTester tester, {
-  GameConfig? config,
-  List<Player>? players,
-}) async {
-  tester.view.physicalSize = const Size(1080, 2400);
-  tester.view.devicePixelRatio = 2.625;
-  addTearDown(tester.view.reset);
-
-  final clock = FakeClock();
-  final cubit = GameCubit(
-    config: config ?? timed(target: 2),
-    players: players ?? makePlayers(2),
-    library: equalLibrary(6),
-    random: ZeroRandom(),
-    clock: clock,
-  );
-  addTearDown(cubit.close);
-
-  await tester.pumpWidget(
-    MaterialApp(
-      theme: buildAppTheme(),
-      // BlocProvider.value hands an existing Cubit to the screen. The test
-      // created it, so the test closes it (addTearDown above).
-      home: BlocProvider.value(value: cubit, child: const GameScreen()),
-    ),
-  );
-  return (cubit, clock);
-}
-
-/// Moves game time by [time] and draws the result.
-///
-/// pumpAndSettle, not pump: the Cubit hands new states to BlocBuilder via a
-/// stream, which delivers them a moment later (a microtask). A single pump
-/// can draw its frame before that, showing the state one step late. It's
-/// safe here because the clock is fake: nothing keeps scheduling frames.
-Future<void> elapse(WidgetTester tester, FakeClock clock, Duration time) async {
-  clock.elapse(time);
-  await tester.pumpAndSettle();
-}
-
-/// Taps the button labelled [label] and draws the result (see [elapse]).
-Future<void> tapLabel(WidgetTester tester, String label) async {
-  await tester.tap(find.text(label));
-  await tester.pumpAndSettle();
-}
+import '../../helpers/game_screen_helpers.dart';
 
 void main() {
   testWidgets('1. countdown: player and 3, then 2 a second later', (
