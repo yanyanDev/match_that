@@ -205,6 +205,15 @@ class GameState {
   /// Whether a sudden death is being played right now.
   bool get inSuddenDeath => suddenDeath != null && phase != GamePhase.gameOver;
 
+  /// Whether time passing can change this state (A1). False while paused
+  /// (U1), in gameOver, and during a sudden death attempt, which has no
+  /// timer (S3): there `tick` returns the same state, so the app can stop
+  /// its clock.
+  bool get timePasses =>
+      !paused &&
+      phase != GamePhase.gameOver &&
+      !(inSuddenDeath && phase == GamePhase.attempting);
+
   /// The players still taking turns, in seat order: everyone in normal
   /// play, only those still in during sudden death.
   List<Player> get remainingPlayers => [
