@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:match_that/cubits/setup_cubit.dart';
 import 'package:match_that/cubits/trick_library_loader.dart';
 import 'package:match_that/screens/home_screen.dart';
 import 'package:match_that/screens/library_error_screen.dart';
@@ -29,13 +31,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // One theme for every screen: colors, fonts, AppBar (lib/ui/).
-      theme: buildAppTheme(),
-      home: switch (library) {
-        TrickLibraryLoaded(:final tricks) => HomeScreen(library: tricks),
-        TrickLibraryFailed(:final errors) => LibraryErrorScreen(errors: errors),
-      },
+    // The SetupCubit is provided ABOVE MaterialApp. Every page pushed on the
+    // Navigator (Setup, Names, Game) is a sibling under MaterialApp, not a
+    // child of the page that pushed it, so this is the one spot all of them
+    // can see. Created once per app run: the setup survives leaving Setup,
+    // a game and New game (D14). Step 10 will pass a saved setup in here.
+    return BlocProvider(
+      create: (_) => SetupCubit(),
+      child: MaterialApp(
+        // One theme for every screen: colors, fonts, AppBar (lib/ui/).
+        theme: buildAppTheme(),
+        home: switch (library) {
+          TrickLibraryLoaded(:final tricks) => HomeScreen(library: tricks),
+          TrickLibraryFailed(:final errors) => LibraryErrorScreen(
+            errors: errors,
+          ),
+        },
+      ),
     );
   }
 }

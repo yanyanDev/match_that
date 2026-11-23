@@ -4,7 +4,7 @@ import 'package:match_that/cubits/game_cubit.dart';
 import 'package:match_that/cubits/setup_cubit.dart';
 import 'package:match_that/engine/trick.dart';
 import 'package:match_that/screens/game/game_screen.dart';
-import 'package:match_that/screens/game_settings_screen.dart';
+import 'package:match_that/screens/setup_screen.dart';
 import 'package:match_that/ui/app_text_styles.dart';
 import 'package:match_that/ui/widgets/primary_button.dart';
 
@@ -72,7 +72,7 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const GameSettingsScreen(),
+                    builder: (context) => SetupScreen(library: library),
                   ),
                 ),
               ),

@@ -2,11 +2,13 @@
 // main button does the right thing). Written test-first.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:match_that/cubits/setup_cubit.dart';
 import 'package:match_that/engine/trick.dart';
 import 'package:match_that/screens/game/game_screen.dart';
-import 'package:match_that/screens/game_settings_screen.dart';
 import 'package:match_that/screens/home_screen.dart';
+import 'package:match_that/screens/setup_screen.dart';
 import 'package:match_that/ui/app_theme.dart';
 import 'package:match_that/ui/widgets/primary_button.dart';
 
@@ -22,10 +24,17 @@ Future<void> pumpHome(
   tester.view.devicePixelRatio = 2.625;
   addTearDown(tester.view.reset);
 
+  // The SetupCubit sits above MaterialApp, as in the app (D14), so the Setup
+  // page that START opens can find it.
+  final setup = SetupCubit();
+  addTearDown(setup.close);
   await tester.pumpWidget(
-    MaterialApp(
-      theme: buildAppTheme(),
-      home: HomeScreen(library: library),
+    BlocProvider.value(
+      value: setup,
+      child: MaterialApp(
+        theme: buildAppTheme(),
+        home: HomeScreen(library: library),
+      ),
     ),
   );
 }
@@ -44,14 +53,14 @@ void main() {
     expect(find.widgetWithText(PrimaryButton, 'START'), findsOneWidget);
   });
 
-  testWidgets('tapping START opens the settings screen', (tester) async {
+  testWidgets('tapping START opens the Setup screen (step 8c)', (tester) async {
     await pumpHome(tester);
 
     await tester.tap(find.widgetWithText(PrimaryButton, 'START'));
     // pumpAndSettle keeps rendering frames until the page transition ends.
     await tester.pumpAndSettle();
 
-    expect(find.byType(GameSettingsScreen), findsOneWidget);
+    expect(find.byType(SetupScreen), findsOneWidget);
   });
 
   testWidgets('DEBUG GAME opens the Game screen with the default setup '

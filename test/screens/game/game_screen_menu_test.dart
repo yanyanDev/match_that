@@ -172,12 +172,14 @@ void main() {
       expect(find.text('PAUSED'), findsOneWidget);
     });
 
-    testWidgets('Home leaves the game', (tester) async {
+    testWidgets('NEW GAME goes back to the page below: Setup (D14)', (
+      tester,
+    ) async {
       final (_, clock) = await pumpGame(tester, config: timed(target: 1));
       await elapse(tester, clock, secs(3));
       await tapLabel(tester, 'MATCHED');
 
-      await tapLabel(tester, 'HOME');
+      await tapLabel(tester, 'NEW GAME');
       expect(find.byType(GameScreen), findsNothing);
       expect(find.text(belowGame), findsOneWidget);
     });
