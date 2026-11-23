@@ -160,7 +160,7 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 - **Platforms:** Android first (emulator), plus a **Flutter web build** hosted for a resume demo link. Android + iOS store releases later (iOS needs a Mac or cloud macOS CI).
 - **State management:** **Cubit** (`flutter_bloc`).
 - **Architecture:** game engine in **pure Dart, no Flutter imports**. Cubit is the thin layer between engine and widgets. Shared across modes: trick library, bags, scoring, players, undo. Mode-specific: turn/timer rules.
-- **Testing:** engine **unit tests** (test-first, one per rule above) + **Cubit tests** with `bloc_test`. Widget tests deferred until screens stabilize.
+- **Testing:** engine **unit tests** (test-first, one per rule above) + **Cubit tests** with `bloc_test` + a **smoke widget test per screen** (D10). No screenshot/golden tests in v1.
 
 ## 9. Deferred (and why it's safe)
 
@@ -176,7 +176,7 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | Saved player profiles | Extends last-setup persistence. |
 | Results summary ("7 landed, 3 discarded") | Engine already knows trick outcomes. |
 | Speed bonus / scoring variants | Scoring is one function. |
-| Widget tests | Screens still changing. |
+| Screenshot / golden tests | Screens still changing. |
 | iOS release | No code changes expected; needs Mac/cloud CI. |
 | **Tuning values:** timer per difficulty, base/stance/modifier points, difficulty thresholds, tier weights | All data/config — set by playtesting. |
 
