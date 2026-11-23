@@ -132,13 +132,27 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 2. **Setup** — players (stepper, 2–8) → game length → difficulty → player names (separate Names screen) → Start game. **Mode row hidden in v1**; the settings model still has `mode` (defaults to Default) and limits derive from it. When Rush ships, add "00 / MODE" at the top.
 3. **Names** — editable default names, each with its **auto-assigned color** (P3).
 4. **Countdown** — 3-2-1 with current player; used at game start and on Resume.
-5. **Game** — progress label (counts **landed** tricks, R8), score cards for all players (must fit **up to 8** — scrolling row or compact layout), current turn + up next, trick card (difficulty, points, **name only — no description**, T5), timer + bar, **Missed** / **Matched** buttons, Pause. "Matched" is the UI label for Landed.
+5. **Game** — progress label (counts **landed** tricks, R8), score cards for all players (scrolling row, D3), current turn + up next, trick card (difficulty, points, **name only — no description**, T5), timer + bar, **Missed** / **Matched** buttons, Pause. "Matched" is the UI label for Landed.
 6. **Trick reveal** — ~1 s transition (see §4).
 7. **Pause menu** — Resume, Undo last call, End game.
 8. **Sudden death** — game screen variant with banner; tied players only.
 9. **Results** — winner (or sudden-death winner / shared win), final standings, **Play again** (= Rematch, same setup) / **New game** (back to Setup).
 
-Design follow-ups (not spec-dictated, decide during step 8): make Missed/Matched taller with a gap (tapped from across a table); "How to play" content; contents of Setup's ☰ menu; "your own boards" helper copy only applies to Rush.
+### Design decisions (step 8)
+
+| # | Rule |
+|---|------|
+| D1 | **Player palette** (P3b), seat 1–8: Lime `#D9FF43`, Sky `#7CC8FF`, Tangerine `#FFA24C`, Pink `#FF8FC7`, Mint `#5EE6B0`, Lavender `#B9A6FF`, Sun `#FFD84D`, Coral `#FF7A6B`. Black text (`#1A1A1A`) on every one is ≥ 6.8 : 1 contrast. They are all close to the cream background, so colored surfaces keep a **1 px black border**. Seat 1 = Lime matches the Figma. |
+| D2 | The **active player's score card fills with that player's color**; other cards are cream with a black border. The current-turn name and the reveal use the player's color too. Lime stays the UI accent (Matched, Start, primary buttons). |
+| D3 | **Score cards** sit in a **horizontal scrolling row** (same card as Figma); the active card scrolls into view automatically. |
+| D4 | **Game screen:** progress label "LANDED n/10" (R8); trick card with difficulty, points, **name only** (T5), time left rounded **up** (G3) and a progress bar; **Missed** and **Matched** at least **72 dp** tall with a **16 dp** gap; Pause top-right. It rebuilds the timer only when the shown second or bar changes (`buildWhen`), not on every 100 ms tick. |
+| D5 | Screens not in the Figma — **trick reveal, pause menu, sudden-death banner, tie / shared-win results, library error** — are designed by Claude Code in the Figma's style (cream background, black ink, lime accent, Anton / IBM Plex Mono / Inter, square-cornered outlined boxes) and reviewed on the emulator. |
+| D6 | **Navigation:** Flutter's plain `Navigator` (push/pop), no router package. Flow: Home → Setup → Names → Game (countdown, reveal, pause menu and sudden death happen **inside** the game screen) → Results. Play again = `rematch` on the same Cubit; New game → back to Setup with the setup kept for this session (saving it across launches is step 10). |
+| D7 | **Results:** headline names the winner ("ALEX WINS!", "ALEX WINS IN SUDDEN DEATH!", or "ALEX & SAM SHARE THE WIN!"); standings sorted by score; **Play again**, **New game**, and **Undo last call** only when `canUndo` (U3, S8). |
+| D8 | **Setup cleanup for v1:** remove the ☰ menu and the "your own boards" helper text (Rush only). **How to play** opens a simple text screen with the Default-mode rules in plain words. |
+| D9 | **Debug screen** (A5) is deleted once Setup can start a real game. |
+| D10 | **Widget tests:** each screen gets a small smoke test (renders without errors; its main buttons call the right Cubit method). No screenshot/golden tests in v1. |
+
 
 ## 8. Persistence, platforms, tech, testing
 
@@ -146,7 +160,7 @@ Design follow-ups (not spec-dictated, decide during step 8): make Missed/Matched
 - **Platforms:** Android first (emulator), plus a **Flutter web build** hosted for a resume demo link. Android + iOS store releases later (iOS needs a Mac or cloud macOS CI).
 - **State management:** **Cubit** (`flutter_bloc`).
 - **Architecture:** game engine in **pure Dart, no Flutter imports**. Cubit is the thin layer between engine and widgets. Shared across modes: trick library, bags, scoring, players, undo. Mode-specific: turn/timer rules.
-- **Testing:** engine **unit tests** (test-first, one per rule above) + **Cubit tests** with `bloc_test`. Widget tests deferred until screens stabilize.
+- **Testing:** engine **unit tests** (test-first, one per rule above) + **Cubit tests** with `bloc_test` + a **smoke widget test per screen** (D10). No screenshot/golden tests in v1.
 
 ## 9. Deferred (and why it's safe)
 
@@ -162,7 +176,7 @@ Design follow-ups (not spec-dictated, decide during step 8): make Missed/Matched
 | Saved player profiles | Extends last-setup persistence. |
 | Results summary ("7 landed, 3 discarded") | Engine already knows trick outcomes. |
 | Speed bonus / scoring variants | Scoring is one function. |
-| Widget tests | Screens still changing. |
+| Screenshot / golden tests | Screens still changing. |
 | iOS release | No code changes expected; needs Mac/cloud CI. |
 | **Tuning values:** timer per difficulty, base/stance/modifier points, difficulty thresholds, tier weights | All data/config — set by playtesting. |
 
@@ -180,7 +194,11 @@ Each step is small, testable, and ends with a commit.
 5. **Pause, undo, end game:** single snapshot, continuous-clock undo (R4), end game. *(tests first)*
 6. **Sudden death.** *(tests first)*
 7. **Cubits (§4c):** GameCubit (wraps the engine, owns the 100 ms clock), SetupCubit, trick library loading, and a throwaway debug screen; `bloc_test` coverage.
-8. **Screens:** Setup (no mode row in v1), Names, Countdown, Game, Trick reveal, Pause menu, Results with Play again / New game. Follow the Figma design except where §7 says otherwise.
+8. **Screens (§7, D1–D10)**, one PR each:
+   - 8a. Theme and shared widgets: colors, palette (D1), fonts, buttons, score card.
+   - 8b. Game screen with countdown, reveal, pause menu and sudden death, opened from the debug entry with the default setup.
+   - 8c. Setup and Names wired to `SetupCubit`; Home → Setup → Names → Game; delete the debug screen (D9).
+   - 8d. Results (D7) and How to play (D8).
 9. **Lifecycle:** auto-pause on background, wakelock.
 10. **Persist last setup.**
 11. **Web build + hosting** (e.g. GitHub Pages) → resume link.
