@@ -76,6 +76,17 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | U6 | After an undo the game is **paused**; Resume continues with the countdown. Undo from the Results screen returns to the paused game. |
 | U7 | **End game** (pause menu) goes to `gameOver` with reason "ended by players"; winners per G10 (a tie goes to sudden death, step 6). |
 
+## 4c. App layer: Cubits (step 7)
+
+| # | Rule |
+|---|------|
+| A1 | **Clock:** the `GameCubit` owns the real clock: `Timer.periodic` every **100 ms** plus a `Stopwatch`, passing the **actually elapsed** time to `tick` (G3), not an assumed 100 ms. The clock is **injectable**, so tests drive time without real waiting. It only runs while time matters: not while paused, in `gameOver`, or during a sudden-death attempt (no timer, S3). When the clock stops (pause, game over, sudden-death attempt), the up to 100 ms since the last tick isn't counted. |
+| A2 | **GameCubit:** one per game, created by Start game with the settings, players and trick library. Its state is the engine's `GameState`. Its methods map 1:1 to the engine: `matched`, `missed`, `pause`, `resume`, `undo`, `endGame`, plus `rematch` (same settings and players, new game, random first player again — P4), which works **only from `gameOver`** (ignored otherwise). Closing it stops the clock. `Random` is injected (production: `Random()`). |
+| A3 | **Trick library loading:** `assets/tricks.json` is loaded **once at app start** and parsed with `parseTricks`. Any parse error is a bug in the data: show an error screen rather than a broken game. The loader is injectable so tests use a JSON string. |
+| A4 | **SetupCubit:** holds player count (stepper, limits from `GameMode.turnBased` in v1), length, difficulty, raw names, and per-seat name errors from `buildPlayers`. **Start game** is only possible when the names are valid. Defaults: **2 players, Quickplay, Beginner**. Lowering the count drops the last seat; raising it adds a blank seat and keeps existing names. Designed so step 10 can start it from a saved setup. |
+| A5 | **Debug screen (throwaway):** plain buttons (Matched, Missed, Pause, Resume, Undo, End game, Rematch) and a text readout (phase, time left rounded **up** to whole seconds, current player, up next, trick and points, scores, last outcome, sudden-death info). Reachable from Home. **Deleted in step 8.** Not unit-tested. |
+| A6 | **Tests:** both Cubits are tested with `bloc_test` and a fake clock. The engine stays pure Dart; only `lib/cubits/` and `lib/screens/` import Flutter. |
+
 ## 5. Trick library
 
 | # | Rule | Why |
@@ -168,7 +179,7 @@ Each step is small, testable, and ends with a commit.
 4. **Trick lifecycle (Default mode):** Landed/Missed, 2-round miss limit, tick-driven timer expiry, landed-count target, game over. *(tests first)*
 5. **Pause, undo, end game:** single snapshot, continuous-clock undo (R4), end game. *(tests first)*
 6. **Sudden death.** *(tests first)*
-7. **GameCubit:** wraps the engine, owns the real ticker; `bloc_test` coverage.
+7. **Cubits (§4c):** GameCubit (wraps the engine, owns the 100 ms clock), SetupCubit, trick library loading, and a throwaway debug screen; `bloc_test` coverage.
 8. **Screens:** Setup (no mode row in v1), Names, Countdown, Game, Trick reveal, Pause menu, Results with Play again / New game. Follow the Figma design except where §7 says otherwise.
 9. **Lifecycle:** auto-pause on background, wakelock.
 10. **Persist last setup.**
