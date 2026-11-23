@@ -3,12 +3,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:match_that/engine/trick.dart';
+import 'package:match_that/screens/game/game_screen.dart';
 import 'package:match_that/screens/game_settings_screen.dart';
 import 'package:match_that/screens/home_screen.dart';
 import 'package:match_that/ui/app_theme.dart';
 import 'package:match_that/ui/widgets/primary_button.dart';
 
-Future<void> pumpHome(WidgetTester tester) async {
+import '../helpers/game_helpers.dart';
+
+Future<void> pumpHome(
+  WidgetTester tester, {
+  List<Trick> library = const [],
+}) async {
   // The default test screen is 800×600; use a typical phone instead
   // (1080×2400 pixels at 2.625 px per dp = about 411×914 dp).
   tester.view.physicalSize = const Size(1080, 2400);
@@ -16,7 +23,10 @@ Future<void> pumpHome(WidgetTester tester) async {
   addTearDown(tester.view.reset);
 
   await tester.pumpWidget(
-    MaterialApp(theme: buildAppTheme(), home: const HomeScreen(library: [])),
+    MaterialApp(
+      theme: buildAppTheme(),
+      home: HomeScreen(library: library),
+    ),
   );
 }
 
@@ -31,10 +41,7 @@ void main() {
   testWidgets('START is the shared PrimaryButton', (tester) async {
     await pumpHome(tester);
 
-    expect(
-      find.widgetWithText(PrimaryButton, 'START'),
-      findsOneWidget,
-    );
+    expect(find.widgetWithText(PrimaryButton, 'START'), findsOneWidget);
   });
 
   testWidgets('tapping START opens the settings screen', (tester) async {
@@ -45,5 +52,28 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(GameSettingsScreen), findsOneWidget);
+  });
+
+  testWidgets('DEBUG GAME opens the Game screen with the default setup '
+      '(step 8b)', (tester) async {
+    await pumpHome(tester, library: equalLibrary(6));
+
+    await tester.tap(find.text('DEBUG GAME'));
+    // Not pumpAndSettle: this game runs on the real 100 ms clock, which
+    // keeps scheduling frames. Pump past the page transition instead.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(find.byType(GameScreen), findsOneWidget);
+    expect(find.text('GET READY'), findsOneWidget);
+    expect(
+      find.text('Player 1').evaluate().isNotEmpty ||
+          find.text('Player 2').evaluate().isNotEmpty,
+      isTrue,
+    );
+
+    // Remove the screen: its BlocProvider closes the Cubit, which stops the
+    // real clock. A test must not end with a timer still running.
+    await tester.pumpWidget(const SizedBox());
   });
 }

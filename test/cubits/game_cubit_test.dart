@@ -74,6 +74,11 @@ void main() {
   setUp(() => clock = FakeClock());
 
   group('A2: wraps the engine', () {
+    test('exposes the game config (the Game screen needs its timings)', () {
+      final config = timed(reveal: ms(800));
+      expect(makeCubit(config: config).config, same(config));
+    });
+
     test('starts with the engine\'s new game: countdown, b0, p1', () {
       final s = makeCubit().state;
 

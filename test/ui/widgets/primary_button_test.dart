@@ -54,6 +54,24 @@ void main() {
     );
   });
 
+  testWidgets('height and showArrow can be changed (MATCHED, D4)', (
+    tester,
+  ) async {
+    await pumpThemed(
+      tester,
+      PrimaryButton(
+        label: 'MATCHED',
+        onPressed: () {},
+        height: 72,
+        showArrow: false,
+      ),
+    );
+
+    expect(tester.getSize(find.byType(PrimaryButton)).height, 72);
+    expect(find.byIcon(Icons.arrow_forward), findsNothing);
+    expect(find.text('MATCHED'), findsOneWidget);
+  });
+
   testWidgets('with onPressed null it is disabled and not lime', (
     tester,
   ) async {

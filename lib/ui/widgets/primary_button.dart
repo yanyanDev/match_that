@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:match_that/ui/app_colors.dart';
-import 'package:match_that/ui/app_text_styles.dart';
+import 'package:match_that/ui/widgets/block_button.dart';
 
-/// The full-width lime button with the label on the left and an arrow on the
-/// right (Figma: START, START GAME, DONE, PLAY AGAIN).
+/// The lime button (Figma: START, START GAME, DONE, PLAY AGAIN, MATCHED).
+/// Lime stays the UI accent (D2).
 ///
 /// A StatelessWidget: what it shows depends only on its constructor fields,
 /// so it has no state of its own. The screen that uses it owns any state and
@@ -13,6 +13,8 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.onPressed,
+    this.height = 56,
+    this.showArrow = true,
   });
 
   final String label;
@@ -21,35 +23,21 @@ class PrimaryButton extends StatelessWidget {
   /// is invalid, A4). Same convention as Flutter's own buttons.
   final VoidCallback? onPressed;
 
+  /// 56 by default; MATCHED on the Game screen is 72 (D4).
+  final double height;
+
+  /// The arrow on the right. MATCHED has none (Figma).
+  final bool showArrow;
+
   @override
   Widget build(BuildContext context) {
-    final enabled = onPressed != null;
-    final foreground = enabled ? AppColors.ink : AppColors.grey;
-
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      // Material paints the fill; InkWell on top of it handles the tap and
-      // draws the ripple. Square corners, no shadow, as in the Figma.
-      child: Material(
-        color: enabled ? AppColors.lime : AppColors.grey.withValues(alpha: 0.15),
-        child: InkWell(
-          onTap: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Text(
-                  label,
-                  style: AppTextStyles.button.copyWith(color: foreground),
-                ),
-                const Spacer(),
-                Icon(Icons.arrow_forward, color: foreground),
-              ],
-            ),
-          ),
-        ),
-      ),
+    return BlockButton(
+      label: label,
+      onPressed: onPressed,
+      fill: AppColors.lime,
+      disabledFill: AppColors.grey.withValues(alpha: 0.15),
+      height: height,
+      showArrow: showArrow,
     );
   }
 }

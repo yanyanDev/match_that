@@ -152,6 +152,8 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | D8 | **Setup cleanup for v1:** remove the ☰ menu and the "your own boards" helper text (Rush only). **How to play** opens a simple text screen with the Default-mode rules in plain words. |
 | D9 | **Debug screen** (A5) is deleted once Setup can start a real game. |
 | D10 | **Widget tests:** each screen gets a small smoke test (renders without errors; its main buttons call the right Cubit method). No screenshot/golden tests in v1. |
+| D11 | **System Back during a game acts as Pause:** it opens the pause menu (or does nothing if already paused). Leaving a game is only through **End game**. Back is normal on every other screen. |
+| D12 | The app is **portrait only** (Android and iOS). |
 
 
 ## 8. Persistence, platforms, tech, testing
