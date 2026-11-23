@@ -51,6 +51,10 @@ class GameCubit extends Cubit<GameState> {
   final List<Player> _players;
   final GameClock _clock;
 
+  /// The game's settings. The Game screen needs its target and timings
+  /// (trick time for the timer bar, reveal length for its two halves).
+  GameConfig get config => _game.config;
+
   /// The current player landed the trick ("Matched" in the UI).
   void matched() => _apply(_game.landed(state));
 
