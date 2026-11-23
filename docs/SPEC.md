@@ -28,12 +28,12 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 
 | # | Rule |
 |---|------|
-| S1 | **Trigger:** when the game would end with **2+ winners** (G10) by reaching the target or by End game, sudden death starts among the tied players instead of `gameOver`. If it ended because **nothing is drawable** (G9), there's nothing to play: it's a **shared win**. |
+| S1 | **Trigger:** when the game would end with **2+ winners** (G10) by reaching the target or by End game, sudden death starts among the tied players instead of `gameOver`. If it ended because **nothing is drawable** (G9), there's nothing to play: it's a **shared win**. When End game starts sudden death, round 1 gets a **freshly drawn** trick; the unfinished one is not discarded. |
 | S2 | Sudden death starts with the **countdown**; each later round's trick gets the **reveal**. |
 | S3 | **Rounds:** every remaining player gets **exactly one attempt** at the **same trick**, one call each (Matched or Missed). **No timer** in sudden death: ticks only run the countdown and reveal. |
 | S4 | **End of a round** (everyone remaining has called): landers stay, missers are out. **If nobody landed, nobody is out.** If exactly one player remains, they **win** (`gameOver`). Otherwise a new round starts with a **new trick**. |
 | S5 | **Tricks** are drawn with the **same weights as the game**, from the **same bags** (discards still apply). A trick everyone missed is **discarded** (T10); a trick someone landed is not. **No points** are scored in sudden death — scores stay as they were. |
-| S6 | **Order:** round 1 starts with the tied player who is **next in the game's turn order** when sudden death begins. Each later round starts with the **next remaining player after the previous round's starter** (wrapping, skipping eliminated players), so the start rotates. |
+| S6 | **Order:** round 1 starts with the tied player who is **next in the game's turn order** when sudden death begins (after a deciding landing: the first tied player after the lander; after End game: the player whose turn it was if they're tied, otherwise the first tied player after them). Each later round starts with the **next remaining player after the previous round's starter** (wrapping, skipping eliminated players), so the start rotates. |
 | S7 | **Pause, Resume and End game** work as in §4b. **End game during sudden death** → `gameOver` with a **shared win** among the remaining players. |
 | S8 | **Undo** works as in §4b (one step; no trick clock in sudden death, so nothing is subtracted). It can undo a call that ended a round, and the call that **started** sudden death (back to normal play). From **Results**, it can undo the call that **decided** sudden death. |
 | S9 | If **nothing is drawable** during sudden death → `gameOver` with a **shared win** among the remaining players. |

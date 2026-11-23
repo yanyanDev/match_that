@@ -79,6 +79,26 @@ void main() {
     });
   });
 
+  group('P5: from (where sudden death rounds start, S6)', () {
+    test('starts at atOrAfter when it is one of the seats', () {
+      final order = TurnOrder.from([0, 2, 3], atOrAfter: 2);
+      expect(order.current, 2);
+      expect(order.seats, [0, 2, 3]);
+    });
+
+    test('a seat not in the list starts at the next one in setup order', () {
+      expect(TurnOrder.from([0, 2, 3], atOrAfter: 1).current, 2);
+    });
+
+    test('past the last seat it wraps to the first', () {
+      expect(TurnOrder.from([0, 2, 3], atOrAfter: 4).current, 0);
+    });
+
+    test('empty seats throw ArgumentError', () {
+      expect(() => TurnOrder.from([], atOrAfter: 0), throwsArgumentError);
+    });
+  });
+
   group('validation', () {
     test('empty seats throw ArgumentError', () {
       expect(() => TurnOrder([], current: 0), throwsArgumentError);

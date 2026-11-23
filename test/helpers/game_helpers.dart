@@ -28,6 +28,30 @@ final library3 = [trick('b0', 3), trick('b1', 5), trick('b2', 7)];
 
 final onlyBeginner = DrawWeights(beginner: 1, intermediate: 0, advanced: 0);
 
+/// [n] beginner tricks t0…t(n-1), all worth 1 point, so ties are easy.
+List<Trick> equalLibrary(int n) => [
+  for (var i = 0; i < n; i++) trick('t$i', 1),
+];
+
+/// Ticks through a countdown or reveal, so the trick is being attempted.
+GameState toPlay(TurnBasedGame game, GameState s) =>
+    s.phase == GamePhase.attempting ? s : game.tick(s, s.phaseRemaining);
+
+/// Applies [calls] in order ('L' = landed, 'M' = missed), ticking through
+/// any countdown or reveal before each one.
+GameState play(TurnBasedGame game, GameState s, String calls) {
+  var state = s;
+  for (final call in calls.split('')) {
+    state = toPlay(game, state);
+    state = switch (call) {
+      'L' => game.landed(state),
+      'M' => game.missed(state),
+      _ => throw ArgumentError.value(call, 'calls', "Use 'L' or 'M'"),
+    };
+  }
+  return state;
+}
+
 /// [n] players with ids p1…pN at seats 0…N-1. Built directly (not with
 /// `buildPlayers`) so tests can also make invalid counts.
 List<Player> makePlayers(int n) => [

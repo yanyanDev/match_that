@@ -223,22 +223,20 @@ void main() {
       expect(ids(over.winners), ['p1']);
     });
 
-    test('a tie lists every tied player (G10, sudden death is step 6)', () {
+    test('a tie goes to sudden death instead of gameOver (S1)', () {
       final (game, start) = startGame(library: [trick('x', 2), trick('y', 2)]);
       final s = game.landed(game.landed(start)); // p1 +2, p2 +2
 
-      final over = game.endGame(game.pause(s));
-      expect(over.endReason, GameEndReason.endedByPlayers);
-      expect(ids(over.winners), ['p1', 'p2']);
+      final tied = game.endGame(game.pause(s));
+      expect(tied.phase, isNot(GamePhase.gameOver));
+      expect(tied.endReason, isNull);
+      expect(ids(tied.winners), ['p1', 'p2']);
     });
 
-    test('works from a pause in the countdown and in a reveal', () {
+    // A pause in the game-start countdown is always 0–0, a tie: see
+    // sudden_death_test.dart.
+    test('works from a pause in a reveal', () {
       final (game, start) = startGame(config: timed());
-      expect(
-        game.endGame(game.pause(start)).endReason,
-        GameEndReason.endedByPlayers,
-      );
-
       final reveal = game.landed(game.tick(start, secs(3)));
       expect(reveal.phase, GamePhase.reveal);
       expect(
@@ -249,7 +247,11 @@ void main() {
 
     test('works from a pause during a resume countdown', () {
       final (game, start) = startGame(config: timed());
-      final playing = game.tick(start, secs(10));
+      // p1 +3 (so no tie), then 5 s into p2's trick.
+      final playing = game.tick(
+        game.landed(game.tick(start, secs(3))),
+        secs(6),
+      );
       final resuming = game.resume(game.pause(playing));
 
       final over = game.endGame(game.pause(resuming));
@@ -273,7 +275,7 @@ void main() {
 
     test('after End game, ticks, taps, pause and resume change nothing', () {
       final (game, start) = startGame();
-      final over = game.endGame(game.pause(start));
+      final over = game.endGame(game.pause(game.landed(start))); // p1 leads
 
       expect(game.tick(over, secs(10)), same(over));
       expect(game.landed(over), same(over));
