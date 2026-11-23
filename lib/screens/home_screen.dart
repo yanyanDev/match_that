@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:match_that/cubits/game_cubit.dart';
-import 'package:match_that/cubits/setup_cubit.dart';
 import 'package:match_that/engine/trick.dart';
-import 'package:match_that/screens/game/game_screen.dart';
 import 'package:match_that/screens/setup_screen.dart';
 import 'package:match_that/ui/app_text_styles.dart';
 import 'package:match_that/ui/widgets/primary_button.dart';
@@ -75,30 +71,6 @@ class HomeScreen extends StatelessWidget {
                     builder: (context) => SetupScreen(library: library),
                   ),
                 ),
-              ),
-
-              // TEMPORARY (step 8b): plays the default setup (2 players,
-              // Quickplay, Beginner) until Setup can start a game in 8c (D9).
-              TextButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    // BlocProvider(create:) makes the Cubit and closes it when
-                    // this page is popped, which stops the game clock.
-                    builder: (context) => BlocProvider(
-                      create: (_) {
-                        final setup = SetupState.initial();
-                        return GameCubit(
-                          config: setup.config,
-                          players: setup.players!,
-                          library: library,
-                        );
-                      },
-                      child: const GameScreen(),
-                    ),
-                  ),
-                ),
-                child: const Text('DEBUG GAME', style: AppTextStyles.button),
               ),
             ],
           ),
