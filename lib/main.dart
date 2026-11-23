@@ -1,24 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:match_that/cubits/trick_library_loader.dart';
+import 'package:match_that/engine/trick.dart';
+import 'package:match_that/screens/debug_game_screen.dart';
 import 'package:match_that/screens/game_settings_screen.dart';
+import 'package:match_that/screens/library_error_screen.dart';
 
-void main() {
+Future<void> main() async {
   debugPaintSizeEnabled =
       false; // to visualize widget layout; "false" to disable
-  runApp(const MyApp());
+  // Flutter's services (here: reading bundled assets) need the binding
+  // before runApp has created it.
+  WidgetsFlutterBinding.ensureInitialized();
+  // Loaded once at app start (A3); the asset is small, so this takes ms.
+  final library = await loadTrickLibrary();
+  runApp(MyApp(library: library));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.library});
+
+  final TrickLibraryResult library;
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: HomeScreen());
+    return MaterialApp(
+      home: switch (library) {
+        TrickLibraryLoaded(:final tricks) => HomeScreen(library: tricks),
+        TrickLibraryFailed(:final errors) => LibraryErrorScreen(errors: errors),
+      },
+    );
   }
 }
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.library});
+
+  final List<Trick> library;
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +125,23 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: const Text(
                   'START',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "IBM Plex Mono",
+                  ),
+                ),
+              ),
+
+              // THROWAWAY (A5): deleted with the debug screen in step 8.
+              TextButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DebugGameScreen(library: library),
+                  ),
+                ),
+                child: const Text(
+                  'DEBUG GAME',
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: "IBM Plex Mono",
