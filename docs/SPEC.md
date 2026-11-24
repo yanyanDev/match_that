@@ -156,6 +156,8 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | D12 | The app is **portrait only** (Android and iOS). |
 | D13 | **Names screen:** a list of rows (seat number, name or its "Player N" default, color tag, ↗). **Tapping a row opens an edit dialog** with one text field (max **12 characters** enforced while typing, P3a) and **Cancel / Save**. Saving a duplicate is allowed but shows its **error under both rows** (A4), and Start game stays disabled until it's fixed. The helper text reads "Tap a name to change it. Leave it blank to use Player N." **Done** returns to Setup. |
 | D14 | **Start game** on Setup creates a `GameCubit` from the setup and opens the Game screen. **New game** returns to Setup with the setup kept for this session; Back from Setup goes to Home. |
+| D15 | **Results details** (extends D7, Figma 05): "GAME COMPLETE" label, the D7 headline, game length ("QUICK PLAY" / "FULL GAME") and "FINAL STANDINGS". Rows ranked by score; **tied scores share a rank number**; winner rows fill with **the winner's player color** (D2). A sudden-death winner's row is marked "SUDDEN DEATH". Buttons: **Play again** (primary), **New game** (secondary), **Undo last call** (only when `canUndo`). Results uses the **same `GameCubit`** as the game (Undo and Play again need it). System Back on Results = New game. |
+| D16 | **How to play** opens from Setup's "HOW TO PLAY" row: a scrolling text screen with the Default-mode rules in plain words (turns, Matched/Missed, timer, two rounds of misses, landed tricks count toward 10/30, pause and undo, sudden death). The wording is the **developer's to approve**. |
 
 
 ## 8. Persistence, platforms, tech, testing
