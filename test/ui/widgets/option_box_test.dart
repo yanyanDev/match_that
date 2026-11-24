@@ -80,6 +80,57 @@ void main() {
     expect(taps, 1);
   });
 
+  testWidgets('compact: 12 pt title, centered, one line (difficulty row)', (
+    tester,
+  ) async {
+    await pumpThemed(
+      tester,
+      OptionBox(
+        title: 'Intermediate',
+        selected: false,
+        onTap: () {},
+        compact: true,
+      ),
+    );
+
+    final title = tester.widget<Text>(find.text('Intermediate'));
+    expect(title.style?.fontSize, 12);
+    expect(title.textAlign, TextAlign.center);
+    expect(title.maxLines, 1);
+  });
+
+  testWidgets('compact: a too-long title shrinks instead of wrapping', (
+    tester,
+  ) async {
+    await pumpThemed(
+      tester,
+      SizedBox(
+        width: 60, // far too narrow for "Intermediate"
+        child: OptionBox(
+          title: 'Intermediate',
+          selected: false,
+          onTap: () {},
+          compact: true,
+        ),
+      ),
+    );
+
+    // One line: the text is no taller than a single 12 pt line would be.
+    expect(tester.getSize(find.text('Intermediate')).height, lessThan(20));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('not compact by default: 14 pt title (QUICK PLAY row)', (
+    tester,
+  ) async {
+    await pumpThemed(
+      tester,
+      OptionBox(title: 'QUICK PLAY', selected: false, onTap: () {}),
+    );
+
+    expect(tester.widget<Text>(find.text('QUICK PLAY')).style?.fontSize, 14);
+  });
+
   testWidgets('tells screen readers it is a selected button', (tester) async {
     final semantics = tester.ensureSemantics();
     await pumpThemed(

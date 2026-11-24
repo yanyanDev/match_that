@@ -154,6 +154,8 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | D10 | **Widget tests:** each screen gets a small smoke test (renders without errors; its main buttons call the right Cubit method). No screenshot/golden tests in v1. |
 | D11 | **System Back during a game acts as Pause:** it opens the pause menu (or does nothing if already paused). Leaving a game is only through **End game**. Back is normal on every other screen. |
 | D12 | The app is **portrait only** (Android and iOS). |
+| D13 | **Names screen:** a list of rows (seat number, name or its "Player N" default, color tag, ↗). **Tapping a row opens an edit dialog** with one text field (max **12 characters** enforced while typing, P3a) and **Cancel / Save**. Saving a duplicate is allowed but shows its **error under both rows** (A4), and Start game stays disabled until it's fixed. The helper text reads "Tap a name to change it. Leave it blank to use Player N." **Done** returns to Setup. |
+| D14 | **Start game** on Setup creates a `GameCubit` from the setup and opens the Game screen. **New game** returns to Setup with the setup kept for this session; Back from Setup goes to Home. |
 
 
 ## 8. Persistence, platforms, tech, testing

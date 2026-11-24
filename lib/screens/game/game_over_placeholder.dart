@@ -10,7 +10,7 @@ import '../../ui/widgets/primary_button.dart';
 import '../../ui/widgets/secondary_button.dart';
 
 /// A bare game-over view until Results exists: winners, Play again (A2),
-/// Undo last call when a call ended the game (U3, S8), and Home.
+/// Undo last call when a call ended the game (U3, S8), and New game (D14).
 class GameOverPlaceholder extends StatelessWidget {
   const GameOverPlaceholder({super.key, required this.state});
 
@@ -46,7 +46,8 @@ class GameOverPlaceholder extends StatelessWidget {
             ],
             const SizedBox(height: 12),
             SecondaryButton(
-              label: 'HOME',
+              // Back to Setup, the page below, with the setup kept (D14).
+              label: 'NEW GAME',
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
