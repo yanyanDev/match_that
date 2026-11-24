@@ -99,11 +99,11 @@ String outcomeText(
     RoundEnded(:final outIds) => switch (outIds.length) {
       0 => 'NOBODY OUT',
       1 => '${name(outIds.single)} IS OUT',
-      _ => '${_joinNames(outIds.map(name).toList())} ARE OUT',
+      _ => '${joinNames(outIds.map(name).toList())} ARE OUT',
     },
   };
 }
 
 /// "A & B", "A, B & C".
-String _joinNames(List<String> names) =>
+String joinNames(List<String> names) =>
     '${names.sublist(0, names.length - 1).join(', ')} & ${names.last}';
