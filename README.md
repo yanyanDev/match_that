@@ -71,15 +71,6 @@ flutter test                         # run all tests
 dart run tool/generate_tricks.dart   # regenerate assets/tricks.json after editing data/trick_rules.json
 ```
 
-## Playtest #1: what I learned
-
-**Worked**
-- It got competitive fast: score tracking, celebrations and groans within minutes.
-- The trick variety surprised people. The generator brings up niche combinations nobody expected.
-
-**Didn't**
-- Players kept asking how many points the current trick was worth, so the points need to stand out more.
-- Players disagreed about some point values. These are being tuned through the rules file.
 
 ## Roadmap
 
