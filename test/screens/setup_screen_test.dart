@@ -143,4 +143,26 @@ void main() {
     // stops the real clock. A test must not end with a timer running.
     await tester.pumpWidget(const SizedBox());
   });
+
+  for (final width in [411.0, 360.0]) {
+    testWidgets('7. the three difficulty boxes are the same size, one line '
+        'each, at $width dp wide', (tester) async {
+      await pumpSetup(tester);
+      // Narrow the screen after pumping (pumpWithSetup sets a 411 dp phone).
+      tester.view.physicalSize = Size(width * 2.625, 2400);
+      await tester.pumpAndSettle();
+
+      final sizes = [
+        for (final title in ['Beginner', 'Intermediate', 'Advanced'])
+          tester.getSize(find.widgetWithText(OptionBox, title)),
+      ];
+      expect(sizes[1], sizes[0]);
+      expect(sizes[2], sizes[0]);
+      for (final title in ['Beginner', 'Intermediate', 'Advanced']) {
+        // A single 12 pt line, never wrapped onto two.
+        expect(tester.getSize(find.text(title)).height, lessThan(20));
+      }
+      expect(tester.takeException(), isNull);
+    });
+  }
 }

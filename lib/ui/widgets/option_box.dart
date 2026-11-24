@@ -14,6 +14,7 @@ class OptionBox extends StatelessWidget {
     this.subtitle,
     required this.selected,
     required this.onTap,
+    this.compact = false,
   });
 
   final String title;
@@ -23,6 +24,10 @@ class OptionBox extends StatelessWidget {
 
   final bool selected;
   final VoidCallback onTap;
+
+  /// For a row of three narrow boxes (difficulty): a smaller, centered,
+  /// single-line title with less side padding, so all three look the same.
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +49,31 @@ class OptionBox extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: compact
+                ? const EdgeInsets.symmetric(horizontal: 8, vertical: 12)
+                : const EdgeInsets.all(12),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: compact
+                  ? CrossAxisAlignment.center
+                  : CrossAxisAlignment.start,
               children: [
-                Text(title, style: AppTextStyles.button),
+                if (compact)
+                  // FittedBox(scaleDown): if the title still doesn't fit
+                  // (a very narrow phone, large system text), it shrinks to
+                  // fit on one line instead of wrapping. It never grows.
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      title,
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.button.copyWith(fontSize: 12),
+                    ),
+                  )
+                else
+                  Text(title, style: AppTextStyles.button),
                 if (subtitle != null) ...[
                   const SizedBox(height: 6),
                   Text(

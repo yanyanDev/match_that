@@ -111,20 +111,29 @@ class SetupScreen extends StatelessWidget {
                         const SizedBox(height: 24),
                         const SectionLabel(number: 3, text: 'Difficulty'),
                         const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            for (final difficulty in Difficulty.values) ...[
-                              if (difficulty != Difficulty.values.first)
-                                const SizedBox(width: 8),
-                              Expanded(
-                                child: OptionBox(
-                                  title: _difficultyTitle(difficulty),
-                                  selected: state.difficulty == difficulty,
-                                  onTap: () => setup.setDifficulty(difficulty),
+                        // IntrinsicHeight asks each box how tall it wants
+                        // to be and gives the row the tallest height; with
+                        // `stretch`, every box then fills that height. So
+                        // the three boxes always match, whatever the text.
+                        IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              for (final difficulty in Difficulty.values) ...[
+                                if (difficulty != Difficulty.values.first)
+                                  const SizedBox(width: 8),
+                                Expanded(
+                                  child: OptionBox(
+                                    title: _difficultyTitle(difficulty),
+                                    selected: state.difficulty == difficulty,
+                                    onTap: () =>
+                                        setup.setDifficulty(difficulty),
+                                    compact: true,
+                                  ),
                                 ),
-                              ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
                         const SizedBox(height: 24),
                         SecondaryButton(
