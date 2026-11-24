@@ -112,7 +112,7 @@ void main() {
   testWidgets('5. PLAYER NAMES opens the Names screen', (tester) async {
     await pumpSetup(tester);
 
-    await tapVisible(tester, find.text('PLAYER NAMES / OPTIONAL'));
+    await tapVisible(tester, find.text('PLAYER NAMES'));
     expect(find.byType(NamesScreen), findsOneWidget);
   });
 

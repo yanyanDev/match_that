@@ -137,7 +137,7 @@ class SetupScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 24),
                         SecondaryButton(
-                          label: 'PLAYER NAMES / OPTIONAL',
+                          label: 'PLAYER NAMES',
                           showArrow: true,
                           // push puts the Names page on top of this one;
                           // its Done (or Back) pops it off again.
