@@ -6,7 +6,7 @@ import '../../engine/game_state.dart';
 import '../../ui/app_colors.dart';
 import 'countdown_view.dart';
 import 'game_display.dart';
-import 'game_over_placeholder.dart';
+import '../results/results_view.dart';
 import 'pause_menu.dart';
 import 'play_view.dart';
 import 'reveal_view.dart';
@@ -37,7 +37,7 @@ class GameScreen extends StatelessWidget {
           GamePhase.countdown => CountdownView(state: state),
           GamePhase.attempting => PlayView(state: state, config: config),
           GamePhase.reveal => RevealView(state: state, reveal: config.reveal),
-          GamePhase.gameOver => GameOverPlaceholder(state: state),
+          GamePhase.gameOver => ResultsView(state: state, config: config),
         };
 
         // PopScope decides whether system Back may leave this page (D11).

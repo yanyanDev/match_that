@@ -94,7 +94,7 @@ void main() {
       await tapPause(tester);
       await tapLabel(tester, 'END GAME');
       expect(cubit.state.phase, GamePhase.gameOver);
-      expect(find.text('GAME OVER'), findsOneWidget);
+      expect(find.text('GAME COMPLETE'), findsOneWidget); // Results (8d)
       expect(find.textContaining('P1'), findsWidgets);
     });
   });
@@ -137,49 +137,6 @@ void main() {
       await tapLabel(tester, 'MATCHED'); // target 1 reached: game over
 
       await pressBack(tester);
-      expect(find.byType(GameScreen), findsNothing);
-      expect(find.text(belowGame), findsOneWidget);
-    });
-  });
-
-  group('8. game-over placeholder (until Results, 8d)', () {
-    testWidgets('Play again starts a rematch with the countdown (A2)', (
-      tester,
-    ) async {
-      final (cubit, clock) = await pumpGame(tester, config: timed(target: 1));
-      await elapse(tester, clock, secs(3));
-      await tapLabel(tester, 'MATCHED');
-      expect(find.text('GAME OVER'), findsOneWidget);
-
-      await tapLabel(tester, 'PLAY AGAIN');
-      expect(cubit.state.phase, GamePhase.countdown);
-      expect(cubit.state.landedCount, 0);
-      expect(find.text('GET READY'), findsOneWidget);
-    });
-
-    testWidgets('Undo last call is offered when a call ended the game (U3)', (
-      tester,
-    ) async {
-      final (cubit, clock) = await pumpGame(tester, config: timed(target: 1));
-      await elapse(tester, clock, secs(3));
-      await tapLabel(tester, 'MATCHED');
-
-      expect(undoButton(tester).onPressed, isNotNull);
-      await tapLabel(tester, 'UNDO LAST CALL');
-      // U6: back in the game, paused, with the menu up.
-      expect(cubit.state.phase, GamePhase.attempting);
-      expect(cubit.state.paused, isTrue);
-      expect(find.text('PAUSED'), findsOneWidget);
-    });
-
-    testWidgets('NEW GAME goes back to the page below: Setup (D14)', (
-      tester,
-    ) async {
-      final (_, clock) = await pumpGame(tester, config: timed(target: 1));
-      await elapse(tester, clock, secs(3));
-      await tapLabel(tester, 'MATCHED');
-
-      await tapLabel(tester, 'NEW GAME');
       expect(find.byType(GameScreen), findsNothing);
       expect(find.text(belowGame), findsOneWidget);
     });
