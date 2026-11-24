@@ -7,6 +7,7 @@ import 'package:match_that/cubits/setup_cubit.dart';
 import 'package:match_that/engine/game_config.dart';
 import 'package:match_that/engine/trick.dart';
 import 'package:match_that/screens/game/game_screen.dart';
+import 'package:match_that/screens/how_to_play_screen.dart';
 import 'package:match_that/screens/names_screen.dart';
 import 'package:match_that/screens/setup_screen.dart';
 import 'package:match_that/ui/widgets/option_box.dart';
@@ -53,7 +54,6 @@ void main() {
 
     expect(find.byIcon(Icons.menu), findsNothing);
     expect(find.textContaining('your own boards'), findsNothing);
-    expect(find.text('HOW TO PLAY'), findsNothing); // 8d
     expect(tester.takeException(), isNull);
   });
 
@@ -114,6 +114,15 @@ void main() {
 
     await tapVisible(tester, find.text('PLAYER NAMES'));
     expect(find.byType(NamesScreen), findsOneWidget);
+  });
+
+  testWidgets('5b. HOW TO PLAY opens the How to play screen (D8, D16)', (
+    tester,
+  ) async {
+    await pumpSetup(tester);
+
+    await tapVisible(tester, find.text('HOW TO PLAY'));
+    expect(find.byType(HowToPlayScreen), findsOneWidget);
   });
 
   testWidgets('6. START GAME opens the Game screen with these players (D14)', (

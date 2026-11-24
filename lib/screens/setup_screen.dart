@@ -12,6 +12,7 @@ import '../ui/widgets/primary_button.dart';
 import '../ui/widgets/secondary_button.dart';
 import '../ui/widgets/section_label.dart';
 import 'game/game_screen.dart';
+import 'how_to_play_screen.dart';
 import 'names_screen.dart';
 
 /// Setup (§7 screen 2, Figma 01): players, game length, difficulty, names,
@@ -153,6 +154,30 @@ class SetupScreen extends StatelessWidget {
                               ? 'Blank names become Player 1, Player 2, etc.'
                               : 'Fix the player names to start.',
                           style: AppTextStyles.body.copyWith(fontSize: 13),
+                        ),
+                        const SizedBox(height: 16),
+                        // A plain text link, like the Figma: not a box.
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppColors.ink,
+                              padding: EdgeInsets.zero,
+                            ),
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const HowToPlayScreen(),
+                              ),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('HOW TO PLAY', style: AppTextStyles.label),
+                                SizedBox(width: 6),
+                                Icon(Icons.arrow_forward, size: 16),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
