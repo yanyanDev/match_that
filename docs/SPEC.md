@@ -87,6 +87,15 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 | A5 | **Debug screen (throwaway):** plain buttons (Matched, Missed, Pause, Resume, Undo, End game, Rematch) and a text readout (phase, time left rounded **up** to whole seconds, current player, up next, trick and points, scores, last outcome, sudden-death info). Reachable from Home. **Deleted in step 8.** Not unit-tested. |
 | A6 | **Tests:** both Cubits are tested with `bloc_test` and a fake clock. The engine stays pure Dart; only `lib/cubits/` and `lib/screens/` import Flutter. |
 
+## 4d. App lifecycle (step 9)
+
+| # | Rule |
+|---|------|
+| L1 | **Auto-pause when out of sight:** when the app is **hidden** (home button, app switch, incoming-call screen, screen lock, or the browser tab hidden on web), the game is paused exactly like the Pause button (U1). **Brief overlays where the game stays visible** (notification shade, iOS Control Center) **do not** pause. |
+| L2 | Returning to the app **does not resume automatically**: the pause menu is showing, and Resume runs the countdown (U2). Already paused, in `gameOver`, or with no game open → nothing happens. |
+| L3 | **Screen kept awake** while the **Game page is open** (countdown, play, reveal, pause menu, sudden death, Results). Leaving the Game page releases it; Home, Setup and Names sleep normally. |
+| L4 | The lifecycle listener and the wakelock live in the **UI layer** (Game page), behind small injectable interfaces so widget tests can check them without real plugins. The engine and Cubits stay unchanged except calling `pause()`. |
+
 ## 5. Trick library
 
 | # | Rule | Why |
@@ -205,7 +214,7 @@ Each step is small, testable, and ends with a commit.
    - 8b. Game screen with countdown, reveal, pause menu and sudden death, opened from the debug entry with the default setup.
    - 8c. Setup and Names wired to `SetupCubit`; Home → Setup → Names → Game; delete the debug screen (D9).
    - 8d. Results (D7) and How to play (D8).
-9. **Lifecycle:** auto-pause on background, wakelock.
+9. **Lifecycle (§4d, L1–L4):** auto-pause when hidden, wakelock while the Game page is open.
 10. **Persist last setup.**
 11. **Web build + hosting** (e.g. GitHub Pages) → resume link.
 12. **Rush mode** — grill its details first.
