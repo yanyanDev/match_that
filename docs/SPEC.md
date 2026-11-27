@@ -91,10 +91,10 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 
 | # | Rule |
 |---|------|
-| L1 | **Auto-pause when out of sight:** when the app is **hidden** (home button, app switch, incoming-call screen, screen lock, or the browser tab hidden on web), the game is paused exactly like the Pause button (U1). **Brief overlays where the game stays visible** (notification shade, iOS Control Center) **do not** pause. |
+| L1 | **Auto-pause when out of sight:** when the app is **hidden** (home button, app switch, incoming-call screen, screen lock, or the browser tab hidden on web), the game is paused exactly like the Pause button (U1). **Brief overlays where the game stays visible** (notification shade, iOS Control Center) **do not** pause. Trigger: the app becomes `hidden`; `inactive` alone never pauses. *iOS note:* an incoming call only makes the app `inactive`, so it pauses once the call is answered, not while it rings. |
 | L2 | Returning to the app **does not resume automatically**: the pause menu is showing, and Resume runs the countdown (U2). Already paused, in `gameOver`, or with no game open → nothing happens. |
 | L3 | **Screen kept awake** while the **Game page is open** (countdown, play, reveal, pause menu, sudden death, Results). Leaving the Game page releases it; Home, Setup and Names sleep normally. |
-| L4 | The lifecycle listener and the wakelock live in the **UI layer** (Game page), behind small injectable interfaces so widget tests can check them without real plugins. The engine and Cubits stay unchanged except calling `pause()`. |
+| L4 | The lifecycle listener and the wakelock live in the **UI layer** (Game page). The wakelock is behind a small injectable interface so widget tests can check it without the real plugin; the lifecycle listener is Flutter's own `AppLifecycleListener`, which widget tests drive with simulated lifecycle states. The engine and Cubits stay unchanged except calling `pause()`. |
 
 ## 5. Trick library
 
