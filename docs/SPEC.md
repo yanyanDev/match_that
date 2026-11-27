@@ -199,22 +199,24 @@ A pass-free, shared-phone fingerboard game. The phone sits on the table, shows a
 
 Each step is small, testable, and ends with a commit.
 
-0. **Project setup:** add `flutter_bloc`, `bloc_test`, `shared_preferences`, `wakelock_plus`; create `lib/engine/`, `lib/cubits/`, `lib/screens/`, `assets/tricks.json`; add a `CLAUDE.md` with conventions; commit this spec as `docs/SPEC.md`.
-1. **Trick model** *(tests first)*:
+✅ = done.
+
+0. **Project setup:** add `flutter_bloc`, `bloc_test`, `shared_preferences`, `wakelock_plus`; create `lib/engine/`, `lib/cubits/`, `lib/screens/`, `assets/tricks.json`; add a `CLAUDE.md` with conventions; commit this spec as `docs/SPEC.md`. ✅
+1. **Trick model** *(tests first)*: ✅
    - 1a. `Trick` model + parser for `assets/tricks.json`: derived difficulty from thresholds, validation errors list, "real file has zero errors" test.
    - 1b. `tool/generate_tricks.dart`: expands `data/trick_rules.json`; tests for stance/rotation bans, custom-name rules, points formula; golden test that its output matches the committed `assets/tricks.json`.
-2. **Trick bags:** weighted tier roll, per-tier shuffle bags, discard removal, weight redistribution, all-empty signal. Use an injected seeded `Random`. *(tests first)*
-3. **Players & turns:** player list, random first player, turn advancement. *(tests first)*
-4. **Trick lifecycle (Default mode):** Landed/Missed, 2-round miss limit, tick-driven timer expiry, landed-count target, game over. *(tests first)*
-5. **Pause, undo, end game:** single snapshot, continuous-clock undo (R4), end game. *(tests first)*
-6. **Sudden death.** *(tests first)*
-7. **Cubits (§4c):** GameCubit (wraps the engine, owns the 100 ms clock), SetupCubit, trick library loading, and a throwaway debug screen; `bloc_test` coverage.
-8. **Screens (§7, D1–D10)**, one PR each:
+2. **Trick bags:** weighted tier roll, per-tier shuffle bags, discard removal, weight redistribution, all-empty signal. Use an injected seeded `Random`. *(tests first)* ✅
+3. **Players & turns:** player list, random first player, turn advancement. *(tests first)* ✅
+4. **Trick lifecycle (Default mode):** Landed/Missed, 2-round miss limit, tick-driven timer expiry, landed-count target, game over. *(tests first)* ✅
+5. **Pause, undo, end game:** single snapshot, continuous-clock undo (R4), end game. *(tests first)* ✅
+6. **Sudden death.** *(tests first)* ✅
+7. **Cubits (§4c):** GameCubit (wraps the engine, owns the 100 ms clock), SetupCubit, trick library loading, and a throwaway debug screen; `bloc_test` coverage. ✅
+8. **Screens (§7, D1–D10)**, one PR each: ✅
    - 8a. Theme and shared widgets: colors, palette (D1), fonts, buttons, score card.
    - 8b. Game screen with countdown, reveal, pause menu and sudden death, opened from the debug entry with the default setup.
    - 8c. Setup and Names wired to `SetupCubit`; Home → Setup → Names → Game; delete the debug screen (D9).
    - 8d. Results (D7) and How to play (D8).
-9. **Lifecycle (§4d, L1–L4):** auto-pause when hidden, wakelock while the Game page is open.
+9. **Lifecycle (§4d, L1–L4):** auto-pause when hidden, wakelock while the Game page is open. ✅
 10. **Persist last setup.**
 11. **Web build + hosting** (e.g. GitHub Pages) → resume link.
 12. **Rush mode** — grill its details first.
