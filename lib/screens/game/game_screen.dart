@@ -10,14 +10,54 @@ import '../results/results_view.dart';
 import 'pause_menu.dart';
 import 'play_view.dart';
 import 'reveal_view.dart';
+import 'screen_wakelock.dart';
 
 /// The Game screen (§7 screens 4–8): one view per state of the game, with
 /// the pause menu on top while paused.
 ///
-/// Needs a [GameCubit] above it (a BlocProvider). Countdown, reveal, pause
-/// and sudden death all happen inside this one screen (D6).
-class GameScreen extends StatelessWidget {
+/// Needs a [GameCubit] and a [ScreenWakelock] above it (providers).
+/// Countdown, reveal, pause and sudden death all happen inside this one
+/// screen (D6).
+///
+/// A StatefulWidget so it can do something when the page opens and closes:
+/// keep the screen awake (L3) and watch for the app being hidden (L1)
+/// exactly while it's open.
+class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
+
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  // Kept from initState: dispose must not look things up through context,
+  // because by then this widget is leaving the tree.
+  late final ScreenWakelock _wakelock;
+  late final AppLifecycleListener _lifecycle;
+
+  /// Runs once, when the Game page enters the widget tree (it opens).
+  @override
+  void initState() {
+    super.initState();
+    _wakelock = context.read<ScreenWakelock>()..enable();
+    // The app's lifecycle goes resumed ⇄ inactive ⇄ hidden ⇄ paused.
+    // onHide fires on inactive → hidden only: the game is out of sight
+    // (home, app switch, lock, tab hidden). A brief overlay (notification
+    // shade, Control Center) stops at inactive and doesn't pause (L1).
+    // Coming back fires other callbacks, so nothing resumes by itself (L2).
+    // pause() is ignored when already paused or in gameOver (U1).
+    _lifecycle = AppLifecycleListener(
+      onHide: () => context.read<GameCubit>().pause(),
+    );
+  }
+
+  /// Runs once, when the Game page leaves the tree for good (it's popped).
+  @override
+  void dispose() {
+    _lifecycle.dispose(); // stop listening: no game is open any more
+    _wakelock.disable();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
