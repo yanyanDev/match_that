@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:match_that/cubits/setup_cubit.dart';
+import 'package:match_that/screens/game/screen_wakelock.dart';
 import 'package:match_that/ui/app_theme.dart';
+
+import 'fake_wakelock.dart';
 
 /// The text on the page under the screen being tested, so tests can see
 /// when a screen popped.
@@ -32,10 +35,14 @@ Future<SetupCubit> pumpWithSetup(
   await tester.pumpWidget(
     BlocProvider.value(
       value: setup,
-      child: MaterialApp(
-        navigatorKey: navigator,
-        theme: buildAppTheme(),
-        home: const Scaffold(body: Center(child: Text(belowPage))),
+      // START GAME opens the Game page, which needs a wakelock (L4).
+      child: RepositoryProvider<ScreenWakelock>.value(
+        value: FakeWakelock(),
+        child: MaterialApp(
+          navigatorKey: navigator,
+          theme: buildAppTheme(),
+          home: const Scaffold(body: Center(child: Text(belowPage))),
+        ),
       ),
     ),
   );

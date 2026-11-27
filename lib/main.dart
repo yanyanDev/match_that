@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:match_that/cubits/setup_cubit.dart';
 import 'package:match_that/cubits/trick_library_loader.dart';
+import 'package:match_that/screens/game/screen_wakelock.dart';
 import 'package:match_that/screens/home_screen.dart';
 import 'package:match_that/screens/library_error_screen.dart';
 import 'package:match_that/ui/app_theme.dart';
@@ -25,9 +26,16 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.library});
+  const MyApp({
+    super.key,
+    required this.library,
+    this.wakelock = const PluginWakelock(),
+  });
 
   final TrickLibraryResult library;
+
+  /// Keeps the screen awake on the Game page (L3). Tests pass a fake (L4).
+  final ScreenWakelock wakelock;
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +46,20 @@ class MyApp extends StatelessWidget {
     // a game and New game (D14). Step 10 will pass a saved setup in here.
     return BlocProvider(
       create: (_) => SetupCubit(),
-      child: MaterialApp(
-        // One theme for every screen: colors, fonts, AppBar (lib/ui/).
-        theme: buildAppTheme(),
-        home: switch (library) {
-          TrickLibraryLoaded(:final tricks) => HomeScreen(library: tricks),
-          TrickLibraryFailed(:final errors) => LibraryErrorScreen(
-            errors: errors,
-          ),
-        },
+      // RepositoryProvider: like BlocProvider, but for any plain object. Up
+      // here for the same reason: the Game page is pushed under MaterialApp.
+      child: RepositoryProvider<ScreenWakelock>.value(
+        value: wakelock,
+        child: MaterialApp(
+          // One theme for every screen: colors, fonts, AppBar (lib/ui/).
+          theme: buildAppTheme(),
+          home: switch (library) {
+            TrickLibraryLoaded(:final tricks) => HomeScreen(library: tricks),
+            TrickLibraryFailed(:final errors) => LibraryErrorScreen(
+              errors: errors,
+            ),
+          },
+        ),
       ),
     );
   }
